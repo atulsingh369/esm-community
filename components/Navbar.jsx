@@ -1,42 +1,73 @@
 const Navbar = () => {
   return (
     <>
-      <div className="navbar bg-base-100">
-        <div className="flex-1">
-          <a className="btn btn-ghost normal-case text-xl">daisyUI</a>
+      <div className="upper-bar flex flex-row items-center justify-between p-2 border-b-4 border-[#FF671F] ">
+        <div className="bar-start-content ">
+          <a>Home</a>
         </div>
-        <div className="flex-none">
-          <ul className="menu menu-horizontal px-1">
-            <li>
-              <a>Item 1</a>
-            </li>
-            <li tabIndex={0}>
-              <a>
-                Parent
-                <svg
-                  className="fill-current"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                >
-                  <path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z" />
-                </svg>
-              </a>
-              <ul className="p-2 bg-base-100">
-                <li>
-                  <a>Submenu 1</a>
-                </li>
-                <li>
-                  <a>Submenu 2</a>
-                </li>
-              </ul>
-            </li>
-            <li>
-              <a>Item 3</a>
-            </li>
-          </ul>
+        <div className="bar-end-content flex gap-3 divide-x divide-double">
+          <a>Skip To Main Content</a>
+          <div className="flex ">
+            <div className="flex gap-3 pl-1">
+              <a>a-</a>
+              <a>A</a>
+              <a>A+</a>
+            </div>
+            <div className="toggle-switch scale-50 flex items-start">
+              <label className="switch-label">
+                <input type="checkbox" className="checkbox" />
+                <span className="slider"></span>
+              </label>
+            </div>
+          </div>
+          <div className="pl-1">
+            <select className="outline-none p-1 rounded-md">
+              <option value="0">English</option>
+              <option value="1">Hindi</option>
+            </select>
+          </div>
         </div>
+      </div>
+      <div className="middle-bar bg-middle-bar bg-contain h-40 ">
+        <div></div>
+      </div>
+      <div className="bottom-bar flex justify-evenly items-center py-1 bg-white  border-b-4 border-[#FF671F] ">
+        <a
+          href=""
+          className="btn bg-white border-none text-black font-bold text-lg hover:bg-[#046A38] hover:text-white"
+        >
+          Home
+        </a>
+        <a
+          href=""
+          className="btn bg-white border-none text-black font-bold text-lg hover:bg-[#046A38] hover:text-white"
+        >
+          About Us
+        </a>
+        <a
+          href=""
+          className="btn bg-white border-none text-black font-bold text-lg hover:bg-[#046A38] hover:text-white"
+        >
+          How We Are
+        </a>
+        <a
+          href=""
+          className="btn bg-white border-none text-black font-bold text-lg hover:bg-[#046A38] hover:text-white"
+        >
+          Gallery
+        </a>
+        <a
+          href=""
+          className="btn bg-white border-none text-black font-bold text-lg hover:bg-[#046A38] hover:text-white"
+        >
+          Log In
+        </a>
+        <a
+          href=""
+          className="btn bg-white border-none text-black font-bold text-lg hover:bg-[#046A38] hover:text-white"
+        >
+          Sign Up
+        </a>
       </div>
     </>
   );

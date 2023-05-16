@@ -9,7 +9,12 @@ module.exports = {
     "./src/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      backgroundImage: {
+        "middle-bar":
+          "url('https://ik.imagekit.io/e5ixuxrlb/esm/wp2629004-camouflage-wallpaper-hd.jpg?updatedAt=1684222571818')",
+      },
+    },
   },
   plugins: [require("daisyui")],
 };
