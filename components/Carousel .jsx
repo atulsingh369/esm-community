@@ -2,7 +2,7 @@ const Carousel = () => {
   return (
     <>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3 p-3">
-        <div className="p-5 border-4 border-[#FF671F] rounded-lg">
+        <div className="p-5 border-4 border-[#FF671F] border-dashed rounded-lg">
           <div className="carousel  ">
             <div id="slide1" className="carousel-item relative h-96 w-full">
               <img
@@ -62,7 +62,7 @@ const Carousel = () => {
             </div>
           </div>
         </div>
-        <div className="w-full border-4 border-[#FF671F] rounded-lg flex justify-center items-center p-5">
+        <div className="w-full border-4 border-[#FF671F] border-dashed rounded-lg flex justify-center items-center p-5">
           <form className="form w-full rounded-md h-96">
             <p id="heading">Login</p>
             <div className="field">
