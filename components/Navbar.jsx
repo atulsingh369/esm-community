@@ -1,4 +1,24 @@
+"use client";
+import { useState, useEffect } from "react";
 const Navbar = () => {
+  const [theme, setTheme] = useState(
+    localStorage.getItem("theme") ? localStorage.getItem("theme") : "forest"
+  );
+
+  const toggleTheme = (e) => {
+    if (e.target.checked) {
+      setTheme("light");
+    } else {
+      setTheme("forest");
+    }
+  };
+
+  useEffect(() => {
+    localStorage.setItem("theme", theme);
+    const localTheme = localStorage.getItem("theme");
+    document.querySelector("html").setAttribute("data-theme", localTheme);
+  }, [theme]);
+
   return (
     <>
       <div className="upper-bar flex flex-row items-center justify-between p-2 border-b-4 border-[#FF671F] ">
@@ -15,7 +35,11 @@ const Navbar = () => {
             </div>
             <div className="toggle-switch scale-50 flex items-start">
               <label className="switch-label">
-                <input type="checkbox" className="checkbox" />
+                <input
+                  type="checkbox"
+                  className="checkbox"
+                  onChange={toggleTheme}
+                />
                 <span className="slider"></span>
               </label>
             </div>
