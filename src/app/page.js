@@ -1,4 +1,5 @@
 import Carousel from "../../components/Carousel ";
+import MovingText from "../../components/MovingText";
 import Navbar from "../../components/Navbar";
 
 export default function Home() {
@@ -6,6 +7,7 @@ export default function Home() {
     <>
       <Navbar />
       <Carousel />
+      <MovingText />
     </>
   );
 }

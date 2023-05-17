@@ -175,3 +175,15 @@
   background-color: red;
   color: white;
 }
+/* moving-text */
+.moving-text {
+  animation: rightToLeft 50s infinite ease-in-out;
+}
+@keyframes rightToLeft {
+  0% {
+    translate: 100%;
+  }
+  100% {
+    translate: -100%;
+  }
+}

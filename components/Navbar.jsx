@@ -56,7 +56,7 @@ const Navbar = () => {
           </div>
         </div>
       </div>
-      <div className="middle-bar bg-middle-bar bg-contain h-40 ">
+      <div className="middle-bar bg-middle-bar bg-contain h-32 ">
         <div></div>
       </div>
       <div className="bottom-bar flex justify-evenly items-center py-1 bg-white  border-b-4 border-[#FF671F] ">
