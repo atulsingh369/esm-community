@@ -37,6 +37,11 @@ const Footer = () => {
                   FeedBack
                 </a>
               </li>
+              <li>
+                <a href="#!" className="hover:underline  ">
+                  Tenders
+                </a>
+              </li>
             </ul>
           </div>
           <div>
