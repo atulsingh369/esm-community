@@ -1,8 +1,69 @@
 "use client";
 import GoogleButton from "react-google-button";
-import React from "react";
+import React, { useState } from "react";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  updateProfile,
+  GoogleAuthProvider,
+  signInWithPopup,
+  sendEmailVerification,
+  onAuthStateChanged,
+} from "firebase/auth";
+import { auth, db } from "../src/app/config";
+import { useDispatch } from "react-redux";
+import { setUser } from "../src/store";
 
 const Carousel = () => {
+  const [state, setState] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [passwordType, setPasswordType] = useState("password");
+
+  const provider = new GoogleAuthProvider();
+
+  const dispatch = useDispatch();
+  const [curUser, setCurUser] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
+
+  const googleLogin = async () => {
+    await signInWithPopup(auth, provider)
+      .then((result) => {
+        // This gives you a Google Access Token. You can use it to access the Google API.
+        const credential = GoogleAuthProvider.credentialFromResult(result);
+        const token = credential.accessToken;
+        // The signed-in user info.
+        const user = result.user;
+        toast.success(`Welcome ${user.displayName}`);
+        // IdP data available using getAdditionalUserInfo(result)
+        dispatch(setUser(user));
+
+        setDoc(doc(db, "users", user.email), {
+          uid: user.uid,
+          displayName: user.displayName,
+          photoURL: user.photoURL,
+          email: user.email,
+          branch: null,
+          year: null,
+        });
+      })
+      .catch((error) => {
+        // Handle Errors here.
+        toast(error);
+        // The email of the user's account used.
+        const email = error.customData.email;
+        // The AuthCredential type that was used.
+        const credential = GoogleAuthProvider.credentialFromError(error);
+        setCurUser({
+          name: "",
+          email: "",
+          password: "",
+        });
+      });
+  };
+
   return (
     <>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3 p-3">
@@ -111,7 +172,7 @@ const Carousel = () => {
             </div>
             <button className="button3">Forgot Password</button>
           </form>
-          {/* <GoogleButton /> */}
+          <GoogleButton onClick={googleLogin} />
         </div>
       </div>
     </>
