@@ -36,7 +36,6 @@ const Carousel = () => {
         const token = credential.accessToken;
         // The signed-in user info.
         const user = result.user;
-        toast.success(`Welcome ${user.displayName}`);
         // IdP data available using getAdditionalUserInfo(result)
         dispatch(setUser(user));
 
@@ -51,7 +50,6 @@ const Carousel = () => {
       })
       .catch((error) => {
         // Handle Errors here.
-        toast(error);
         // The email of the user's account used.
         const email = error.customData.email;
         // The AuthCredential type that was used.
