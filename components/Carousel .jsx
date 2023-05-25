@@ -111,7 +111,7 @@ const Carousel = () => {
             </div>
             <button className="button3">Forgot Password</button>
           </form>
-          <GoogleButton />
+          {/* <GoogleButton /> */}
         </div>
       </div>
     </>
