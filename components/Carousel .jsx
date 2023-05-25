@@ -1,4 +1,5 @@
-// import GoogleButton from "react-google-button";
+"use client";
+import GoogleButton from "react-google-button";
 import React from "react";
 
 const Carousel = () => {
@@ -65,7 +66,7 @@ const Carousel = () => {
             </div>
           </div>
         </div>
-        <div className="w-full border-4 border-[#FF671F] border-dashed rounded-lg flex justify-center items-center p-5">
+        <div className="w-full border-4 border-[#FF671F] border-dashed rounded-lg flex flex-col gap-2 justify-center items-center p-5">
           <form className="form w-full rounded-md h-96">
             <p id="heading">Login</p>
             <div className="field">
@@ -109,8 +110,8 @@ const Carousel = () => {
               <button className="button2">Sign Up</button>
             </div>
             <button className="button3">Forgot Password</button>
-            {/* <GoogleButton /> */}
           </form>
+          <GoogleButton />
         </div>
       </div>
     </>

@@ -60,7 +60,8 @@ const Navbar = () => {
         <div></div>
       </div>
       <div className="bottom-bar flex justify-evenly items-center py-1 bg-white  border-b-4 border-[#FF671F] ">
-        <a
+       
+				<a
           href=""
           className="btn bg-white border-none text-black font-semibold text-lg hover:bg-[#046A38] hover:text-white hover:font-normal"
         >
