@@ -35,14 +35,14 @@ export default function Home() {
 	return (
 		<>
 
-			<Navbar />
 			<Provider store={store}>
 				<PersistGate loading={null} persistor={persistStore(store)}>
+					<Navbar />
 					<Carousel />
 					<MovingText />
+					<Footer />
 				</PersistGate>
 			</Provider>
-			<Footer />
 		</>
 	);
 }

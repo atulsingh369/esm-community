@@ -1,6 +1,13 @@
 "use client";
+import { signOut } from "firebase/auth";
 import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { auth } from "../src/app/config";
+import { setUser } from "../src/store";
+
 const Navbar = () => {
+  const dispatch = useDispatch();
+
   const [theme, setTheme] = useState(
     localStorage.getItem("theme") ? localStorage.getItem("theme") : "forest"
   );
@@ -11,6 +18,15 @@ const Navbar = () => {
     } else {
       setTheme("forest");
     }
+  };
+
+  const user = useSelector((state) => state.user);
+
+  const logOut = async () => {
+    await signOut(auth)
+      .then(() => {})
+      .catch((error) => {});
+    dispatch(setUser(null));
   };
 
   useEffect(() => {
@@ -60,43 +76,69 @@ const Navbar = () => {
         <div></div>
       </div>
       <div className="bottom-bar flex justify-evenly items-center py-1 bg-white  border-b-4 border-[#FF671F] ">
-       
-				<a
+        <a
           href=""
-          className="btn bg-white border-none text-black font-semibold text-lg hover:bg-[#046A38] hover:text-white hover:font-normal"
-        >
+          className="btn bg-white border-none text-black font-semibold text-lg hover:bg-[#046A38] hover:text-white hover:font-normal">
           Home
         </a>
         <a
           href=""
-          className="btn bg-white border-none text-black font-semibold text-lg hover:bg-[#046A38] hover:text-white hover:font-normal"
-        >
+          className="btn bg-white border-none text-black font-semibold text-lg hover:bg-[#046A38] hover:text-white hover:font-normal">
           About Us
         </a>
         <a
           href=""
-          className="btn bg-white border-none text-black font-semibold text-lg hover:bg-[#046A38] hover:text-white hover:font-normal"
-        >
+          className="btn bg-white border-none text-black font-semibold text-lg hover:bg-[#046A38] hover:text-white hover:font-normal">
           How We Are
         </a>
         <a
           href=""
-          className="btn bg-white border-none text-black font-semibold text-lg hover:bg-[#046A38] hover:text-white hover:font-normal"
-        >
+          className="btn bg-white border-none text-black font-semibold text-lg hover:bg-[#046A38] hover:text-white hover:font-normal">
           Gallery
         </a>
-        <a
-          href=""
-          className="btn bg-white border-none text-black font-semibold text-lg hover:bg-[#046A38] hover:text-white hover:font-normal"
-        >
-          Log In
-        </a>
-        <a
-          href=""
-          className="btn bg-white border-none text-black font-semibold text-lg hover:bg-[#046A38] hover:text-white hover:font-normal"
-        >
-          Sign Up
-        </a>
+        {!user ? (
+          <div>
+            <a
+              href=""
+              className="btn bg-white border-none text-black font-semibold text-lg hover:bg-[#046A38] hover:text-white hover:font-normal">
+              Log In
+            </a>
+            <a
+              href=""
+              className="btn bg-white border-none text-black font-semibold text-lg hover:bg-[#046A38] hover:text-white hover:font-normal">
+              Sign Up
+            </a>
+          </div>
+        ) : (
+          <div className="dropdown dropdown-hover dropdown-end">
+            <span
+              tabIndex={0}
+              className="flex btn bg-white border-none text-black font-semibold text-lg hover:bg-[#046A38] hover:text-white hover:font-normal">
+              <span id="hello">
+                {" "}
+                Hi&nbsp;{user.displayName}&nbsp;&nbsp;&nbsp;
+              </span>
+              <div className="avatar">
+                <div className="w-9 rounded-full">
+                  {user.photoURL && <img src={user.photoURL} />}
+                  {!user.photoURL && (
+                    <img src="https://ik.imagekit.io/xji6otwwkb/Profile.png?updatedAt=1680849745697" />
+                  )}
+                </div>
+              </div>
+            </span>
+            <ul
+              tabIndex={0}
+              className="dropdown-content menu divide-y-2 divide-base-300 shadow bg-base-100 rounded-box w-52">
+              <li>
+                <a href="">Profile</a>
+              </li>
+              <li>
+                <span onClick={logOut}>Logout</span>
+              </li>
+            </ul>
+          </div>
+        )}
       </div>
     </>
   );
