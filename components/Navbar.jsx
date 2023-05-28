@@ -74,7 +74,30 @@ const Navbar = () => {
         </div>
       </div>
       <div className="middle-bar bg-middle-bar bg-contain h-32 ">
-        <div></div>
+        <div className="flex  justify-between">
+          <div className="flex justify-center items-center gap-5">
+            <Link href="/">
+              <img
+                src="https://ik.imagekit.io/e5ixuxrlb/esm/logo.png?updatedAt=1685270347657"
+                alt=""
+                className="h-32"
+              />
+            </Link>
+            <Link href="/">
+              {" "}
+              <h1 className="text-4xl text-white font-semibold bg-[#FF671F] pl-5 pr-5 pt-2 pb-2">
+                भूतपूर्व सैनिक जन कल्याण समिति
+              </h1>
+            </Link>
+          </div>
+          <div className="p-2 ">
+            <img
+              src="https://ik.imagekit.io/e5ixuxrlb/esm/emblem.png?updatedAt=1685270543927"
+              alt=""
+              className="h-28"
+            />
+          </div>
+        </div>
       </div>
       <div className="bottom-bar flex justify-evenly items-center py-1 bg-white  border-b-4 border-[#FF671F] ">
         <a
