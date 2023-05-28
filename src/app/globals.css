@@ -103,6 +103,15 @@
   background-color: #171717;
   box-shadow: inset 2px 5px 10px rgb(5, 5, 5);
 }
+.file-input {
+  height: 150px;
+  border-radius: 25px;
+  padding: 0.6em;
+  outline: none;
+  color: white;
+  background-color: #171717;
+  box-shadow: inset 2px 5px 10px rgb(5, 5, 5);
+}
 
 .input-icon {
   height: 1.3em;
