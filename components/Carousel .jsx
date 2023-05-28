@@ -221,8 +221,8 @@ const Carousel = () => {
         {!user && (
           <div className="w-full border-4 border-[#FF671F] border-dashed rounded-lg flex flex-col gap-2 justify-center items-center p-5">
             <div className="form w-full rounded-md h-96">
-              <p id="heading">{state ? "Login" : "SignUp"}</p>
-              {!state && (
+              <p id="heading">Log In</p>
+              {/* {!state && (
                 <div className="field">
                   <svg
                     className="input-icon"
@@ -247,7 +247,7 @@ const Carousel = () => {
                     }
                   />
                 </div>
-              )}
+              )} */}
 
               <div className="field">
                 <svg
@@ -263,7 +263,7 @@ const Carousel = () => {
                 <input
                   autoComplete="off"
                   required
-                  placeholder="Username"
+                  placeholder="Email"
                   className="input-field"
                   type="email"
                   name="email"
@@ -305,18 +305,11 @@ const Carousel = () => {
                   Sign Up
                 </button>
               </div> */}
-              {state ? (
-                <button onClick={signIn} className="button1">
-                  Login
-                </button>
-              ) : (
-                <button onClick={signUp} className="button2">
-                  SignUp
-                </button>
-              )}
+
+              <button className="button1">Log In</button>
 
               <button className="button3">Forgot Password</button>
-              {state ? (
+              {/* {state ? (
                 <p>
                   Not Registered Yet ?
                   <span
@@ -338,9 +331,9 @@ const Carousel = () => {
                   </span>
                   here..
                 </p>
-              )}
+              )} */}
             </div>
-            <GoogleButton onClick={googleLogin} />
+            {/* <GoogleButton onClick={googleLogin} /> */}
           </div>
         )}
         <ToastContainer />

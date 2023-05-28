@@ -126,12 +126,6 @@ const Navbar = () => {
         </a>
         {!user ? (
           <div className="flex ">
-            <a
-              href=""
-              className="btn bg-white border-none text-black font-semibold text-lg hover:bg-[#046A38] hover:text-white hover:font-normal"
-            >
-              Log In
-            </a>
             <Link
               href="/Register"
               className="btn bg-white border-none text-black font-semibold text-lg hover:bg-[#046A38] hover:text-white hover:font-normal"
