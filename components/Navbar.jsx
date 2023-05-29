@@ -84,7 +84,7 @@ const Navbar = () => {
               />
             </Link>
             <Link href="/">
-              {" "}
+         
               <h1 className="text-4xl text-white font-semibold bg-[#FF671F] pl-5 pr-5 pt-2 pb-2">
                 भूतपूर्व सैनिक जन कल्याण समिति
               </h1>
@@ -140,7 +140,7 @@ const Navbar = () => {
               className="flex btn bg-white border-none text-black font-semibold text-lg hover:bg-[#046A38] hover:text-white hover:font-normal"
             >
               <span id="hello">
-                {" "}
+             
                 Hi&nbsp;{user.displayName}&nbsp;&nbsp;&nbsp;
               </span>
               <div className="avatar">

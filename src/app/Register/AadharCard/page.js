@@ -7,7 +7,7 @@ const Uploads = () => {
     <>
       <div className="flex flex-col justify-center items-center h-screen">
         <div className="w-1/2">
-          <form className="form">
+          <div className="form">
             <p id="heading">Upload Your Aadhar Card</p>
             <div className="field">
               <svg
@@ -27,18 +27,19 @@ const Uploads = () => {
                 type="text"
               />
             </div>
-            <div className="flex flex-col justify-evenly items-center  border-4 border-dashed border-white  file-input ">
-              <div>
-                <input type="file" />
+            <label htmlFor="aad" className="flex flex-col justify-evenly items-center  border-4 border-dashed border-white  file-input ">
+							<div>
+								<span>Upload Here</span>
+                <input id="aad" className="hidden" type="file" />
               </div>
-            </div>
+            </label>
 
             <div className="btn mb-2">
               <button className="button2">
                 <Link href="/Register/Photo">Save & Next</Link>
               </button>
             </div>
-          </form>
+          </div>
         </div>
       </div>
     </>
