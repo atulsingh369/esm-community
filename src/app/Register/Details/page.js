@@ -90,12 +90,12 @@ const Details = () => {
 								className="input-field"
 								type="text"
 							/>
-						</div>
-						<div className="btn mb-2">
-							<button className="button2">
-								<Link href="/Register/AadharCard">Save & Next</Link>
-							</button>
-						</div>
+						</div>		<Link href="/Register/AadharCard">
+							<div className="btn mb-2">
+								<button className="button2">
+									Save & Next
+								</button>
+							</div></Link>
 					</div>
 				</div>
 			</div>

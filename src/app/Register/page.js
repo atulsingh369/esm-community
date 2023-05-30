@@ -1,9 +1,71 @@
 import { MdAttachEmail } from "react-icons/md";
-import { FaServicestack } from "react-icons/fa";
-import { GiField } from "react-icons/gi";
 import Link from "next/link";
 
 const RegisterForm = () => {
+
+	const signUp = async () => {
+		setLoading(true);
+		if (!curUser.email || !curUser.password) {
+			toast.error("Enter Required Details");
+			setCurUser({
+				name: "",
+				email: "",
+				password: "",
+			});
+
+			setLoading(false);
+			setPasswordType("password");
+			return;
+		}
+		try {
+			// await sendSignInLinkToEmail(auth, curUser.email, actionCodeSettings);
+			const credential = await createUserWithEmailAndPassword(
+				auth,
+				curUser.email,
+				curUser.password
+			);
+			const res = credential.user;
+			await updateProfile(res, {
+				displayName: curUser.email,
+			});
+			await sendEmailVerification(res);
+			await setDoc(doc(db, "users", res.email), {
+				uid: res.uid,
+				displayName: res.displayName,
+				photoURL: res.photoURL,
+				email: res.email,
+			});
+			setState(!state);
+			setCurUser({
+				email: "",
+				password: "",
+			});
+			const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+				if (currentUser && currentUser.uid === user.uid) {
+					currentUser.reload();
+					if (currentUser.emailVerified) {
+						// Email is verified, do nothing
+						unsubscribe(); // Stop listening for changes
+					} else {
+						// Email is not verified, delete the user
+						deleteDoc(doc(db, "users", user.email));
+						currentUser.delete();
+						toast.error("Email not verified, account deleted.");
+						unsubscribe(); // Stop listening for changes
+					}
+				}
+			});
+			toast.success("Registerd Succesfully");
+		} catch (error) {
+			toast.error(error.code);
+			console.log(error);
+			setCurUser({
+				email: "",
+				password: "",
+			});
+		}
+	};
+
 	return (
 		<>
 			<div className="flex flex-col justify-center items-center h-screen">
@@ -18,6 +80,7 @@ const RegisterForm = () => {
 								placeholder="Email"
 								className="input-field"
 								type="text"
+								
 							/>
 						</div>
 						<div className="field">
@@ -54,11 +117,13 @@ const RegisterForm = () => {
 								type="password"
 							/>
 						</div>
-						<div className="btn">
-							<button className="button2">
-								<Link href="/Register/Details">Sign Up</Link>
-							</button>
-						</div>
+						<Link href="/Register/Details">
+							<div className="btn">
+								<button className="button2">
+									Sign Up
+								</button>
+							</div>
+						</Link>
 						<button className="button3">Clear All</button>
 					</div>
 				</div>

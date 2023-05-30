@@ -16,12 +16,12 @@ const Photo = () => {
 								<input id="pic" className="hidden" type="file" />
 							</div>
 						</label>
-
-						<div className="btn mb-2">
-							<button className="button2">
-								<Link href="/">Submit</Link>
-							</button>
-						</div>
+						<Link href="/">
+							<div className="btn mb-2">
+								<button className="button2">
+									Submit
+								</button>
+							</div></Link>
 					</div>
 				</div>
 			</div>
