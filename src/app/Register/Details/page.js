@@ -1,4 +1,5 @@
-import React from "react";
+"use client";
+import React, { useState } from "react";
 import { FaServicestack } from "react-icons/fa";
 import { GiField } from "react-icons/gi";
 import { BsFillTelephoneForwardFill } from "react-icons/bs";
@@ -6,6 +7,16 @@ import { BiCurrentLocation } from "react-icons/bi";
 import Link from "next/link";
 
 const Details = () => {
+
+	const [details, setDetails] = useState({
+		name: "",
+		email: "",
+		serviceNo: "",
+		serviceField: "",
+		address: "",
+		panNo: "",
+	})
+
 	return (
 		<>
 			<div className="flex flex-col justify-center items-center h-screen">
