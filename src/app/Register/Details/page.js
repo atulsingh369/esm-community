@@ -67,10 +67,9 @@ const Details = () => {
 						<div className="field">
 							<BsFillTelephoneForwardFill className="input-icon" />
 							<input
-								placeholder="Phone No."
+								placeholder="Email"
 								className="input-field"
-								type="tel"
-								maxLength={10}
+								type="email"
 							/>
 						</div>
 						<div className="field">
