@@ -16,9 +16,7 @@ export const authSlice = createSlice({
 			if (action.payload) {
 				state.user = {
 					uid: action.payload.uid,
-					email: action.payload.email,
-					displayName: action.payload.displayName,
-					photoURL: action.payload.photoURL,
+					phoneNumber: action.payload.phoneNumber,
 					// Add other necessary properties here
 				};
 			} else {
