@@ -43,7 +43,6 @@ export default function Home() {
 					<MovingText />
 					<Gallery />
 					<Footer />
-					<RegisterForm hide="hidden" />
 				</PersistGate>
 			</Provider>
 		</>

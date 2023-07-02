@@ -17,7 +17,7 @@ const Navbar = () => {
     if (e.target.checked) {
       setTheme("light");
     } else {
-      setTheme("forest");
+			setTheme("forest");
     }
   };
 
