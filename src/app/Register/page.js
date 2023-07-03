@@ -9,16 +9,7 @@ import { RecaptchaVerifier, signInWithPhoneNumber, createUserWithEmailAndPasswor
 import { db, auth } from "../config";
 import { setUser } from "../../store";
 import Details from "./Details/page"
-import { BsFillShieldLockFill, BsTelephoneFill } from "react-icons/bs";
-import { CgSpinner } from "react-icons/cg";
-import OtpInput from "otp-input-react";
-import 'react-phone-number-input/style.css'
-import PhoneInput from 'react-phone-number-input'
-import { useDispatch } from 'react-redux';
-import { FaServicestack } from "react-icons/fa";
-import { GiField } from "react-icons/gi";
-import { BsFillTelephoneForwardFill } from "react-icons/bs";
-import { BiCurrentLocation } from "react-icons/bi";
+
 
 const RegisterForm = () => {
 	const router = useRouter();
@@ -46,64 +37,6 @@ const RegisterForm = () => {
 	// 		setLoading(false);
 	// 	};
 	// }, []);
-
-	const onCaptchVerify = () => {
-		if (!window.recaptchaVerifier) {
-			window.recaptchaVerifier = new RecaptchaVerifier(
-				"recaptcha-container",
-				{
-					size: "invisible",
-					callback: (response) => {
-						onSignup();
-					},
-					"expired-callback": () => { },
-				},
-				auth
-			);
-		}
-	}
-
-	const onSignup = async () => {
-		setLoading(true);
-		onCaptchVerify();
-
-		const appVerifier = window.recaptchaVerifier;
-
-		const formatPh = "+" + value;
-
-		await signInWithPhoneNumber(auth, formatPh, appVerifier)
-			.then((confirmationResult) => {
-				window.confirmationResult = confirmationResult;
-				setLoading(false);
-				setTimeout(() => {
-					setShowOTP(true);
-				}, 1000);
-				toast.success("OTP sent successfully!");
-			})
-			.catch((error) => {
-				toast.error(error);
-				setLoading(false);
-				setValue("");
-			});
-	}
-
-	const onOTPVerify = () => {
-		setLoading(true);
-		window.confirmationResult
-			.confirm(otp)
-			.then(async (res) => {
-				await updateDoc(doc(db, "users", curUser.email), {
-					phnNo: value,
-				});
-				setShowDetail(true)
-				toast.success("Verified");
-				setLoading(false);
-			})
-			.catch((err) => {
-				toast.error(err);
-				setLoading(false);
-			});
-	}
 
 	const signUp = async () => {
 		setLoading(true);
@@ -139,25 +72,11 @@ const RegisterForm = () => {
 				email: "",
 				password: "",
 			});
-			// const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-			// 	if (currentUser && currentUser.uid === user.uid) {
-			// 		currentUser.reload();
-			// 		if (currentUser.emailVerified) {
-			// 			// Email is verified, do nothing
-			// 			unsubscribe(); // Stop listening for changes
-			// 		} else {
-			// 			// Email is not verified, delete the user
-			// 			deleteDoc(doc(db, "users", user.email));
-			// 			currentUser.delete();
-			// 			toast.error("Email not verified, account deleted.");
-			// 			unsubscribe(); // Stop listening for changes
-			// 		}
-			// 	}
-			// });
+
 			setLoading(false);
 			setTimeout(() => {
 				setEmailPass(true);
-			}, 1000);
+			}, 2500);
 			toast.success("Registerd Succesfully");
 		} catch (error) {
 			toast.error(error.code);
@@ -258,80 +177,9 @@ const RegisterForm = () => {
 					<ToastContainer />
 				</div>
 			)
-				: (<div>
-					{!showDetail ? (
-						<div className={`flex flex-col justify-center items-center h-screen`}>
-							<div className="w-1/2">
-
-								<div className="w-full form flex flex-col gap-4 rounded-lg p-4">
-									{showOTP ? (
-										<>
-											<div className="bg-white text-secondary border-4 border-[#FF671F] w-fit mx-auto p-4 rounded-full">
-												<BsFillShieldLockFill size={30} />
-											</div>
-											<label
-												htmlFor="otp"
-												className="font-bold text-xl text-white text-center"
-											>
-												Enter your OTP
-											</label>
-											<OtpInput
-												value={otp}
-												onChange={setOtp}
-												OTPLength={6}
-												otpType="number"
-												disabled={false}
-												autoFocus
-												className="opt-container "
-											></OtpInput>
-											<button
-												onClick={onOTPVerify}
-												className="btn w-full flex gap-1 items-center justify-center py-2.5 text-white rounded"
-											>
-												{loading && (
-													<CgSpinner size={20} className="mt-1 animate-spin" />
-												)}
-												<span className="button2">Verify OTP</span>
-											</button>
-										</>
-									) : (
-										<>
-											<div className="bg-white text-secondary border-4 border-[#FF671F] w-fit mx-auto p-4 rounded-full">
-												<BsTelephoneFill size={30} />
-											</div>
-											<label
-												htmlFor=""
-												className="font-bold text-xl my-5 text-white text-center"
-											>
-												Verify your phone number
-											</label>
-											<PhoneInput
-												placeholder="Enter phone number"
-												defaultCountry="IN"
-												value={value}
-												onChange={setValue} />
-											<div id="recaptcha-container"
-												data-sitekey="6LcsaxsdAAAAAEBn0sPDCEncnU9564MisyRuDzD_"
-												data-callback="sendForm"
-												data-size="invisible">
-											</div>
-											<button
-												onClick={onSignup}
-												className="w-full btn flex gap-1 items-center justify-center py-2.5 text-white rounded"
-											>
-												{loading && (
-													<CgSpinner size={20} className="mt-1 animate-spin" />
-												)}
-												<span className="button2">Send code via SMS</span>
-											</button>
-										</>
-									)}
-								</div>
-							</div>
-							<ToastContainer />
-						</div>) : (
-						<Details />
-					)}</div>)}
+				: (
+					<Details />
+				)}
 
 
 
