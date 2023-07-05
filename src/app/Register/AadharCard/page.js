@@ -6,7 +6,7 @@ const Uploads = () => {
 	return (
 		<>
 			<div className="flex flex-col justify-center items-center h-screen">
-				<div className="w-1/2">
+				<div className="w-screen md:w-1/2">
 					<div className="form">
 						<p id="heading">Upload Your Aadhar Card</p>
 						<div className="field">
