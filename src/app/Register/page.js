@@ -5,12 +5,13 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { doc, onSnapshot, setDoc, updateDoc } from "firebase/firestore";
 import { createUserWithEmailAndPassword, sendEmailVerification, updateProfile } from "firebase/auth";
-import { db, auth } from "../config";
+import { db, auth, storage } from "../config";
 import { setUser } from "../../store";
 import "./load.css"
 import { FaServicestack } from 'react-icons/fa';
 import { GiField } from 'react-icons/gi';
 import { BiCurrentLocation } from 'react-icons/bi';
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 
 const RegisterForm = () => {
 	const router = useRouter();
@@ -21,6 +22,7 @@ const RegisterForm = () => {
 
 	// const dispatch = useDispatch();
 	const [emails, setEmails] = useState("");
+	const [name, setName] = useState("");
 	const [image, setImage] = useState(null);
 	const [curUser, setCurUser] = useState({
 		email: "",
@@ -43,11 +45,12 @@ const RegisterForm = () => {
 		panNo: "",
 	})
 
-	const [aadharNo, setAadharNo] = useState("")
+	const [aadharNo, setAadharNo] = useState("");
 
 
 	const [emailPass, setEmailPass] = useState(false);
 	const [aadharDetail, setAadharDetail] = useState(false);
+	const [photoDetail, setPhotoDetail] = useState(false);
 
 
 	// Registering User
@@ -88,13 +91,13 @@ const RegisterForm = () => {
 
 			setLoading(false);
 			setEmails(curUser.email);
+			setName(curUser.name);
 			setTimeout(() => {
 				setEmailPass(true);
 			}, 1500);
 			toast.success("Registerd Succesfully");
 		} catch (error) {
 			toast.error(error.code);
-			console.log(error);
 			setLoading(false)
 			setCurUser({
 				name: "",
@@ -113,8 +116,8 @@ const RegisterForm = () => {
 				setDetails(initialValues);
 				setLoading(false);
 				return;
-			} else {
-				console.log(emails);
+			}
+			else {
 				await updateDoc(doc(db, "users", emails), {
 					phoneNo: details.phn,
 					serviceNo: details.serviceNo,
@@ -124,7 +127,10 @@ const RegisterForm = () => {
 				});
 				setDetails(initialValues);
 				setLoading(false);
-				setAadharDetail(true);
+				setTimeout(() => {
+					setAadharDetail(true);
+				}, 1500);
+				toast.success("Details Saved Succesfully");
 			}
 		} catch (error) {
 			toast.error(error.message);
@@ -139,9 +145,45 @@ const RegisterForm = () => {
 		setAadharPic(URL.createObjectURL(e.target.files[0]));
 	};
 
+	//Uploading Aadhar
+	const aadhar = async () => {
+		try {
+			setLoading(true)
+			if (!image || !aadharNo) {
+				toast.error("Enter Details");
+				setAadharNo("");
+				setAadharPic(
+					"https://ik.imagekit.io/xji6otwwkb/ESM/Adhaar-Card-Sample-Vector-File-sdfied.png?updatedAt=1688543664066")
+				setLoading(false);
+				return;
+			}
+			else {
+				const imageRef = ref(storage, `AadharCard/AadharNo_${name}_${aadharNo}`);
+				await uploadBytes(imageRef, image);
+				const url = await getDownloadURL(imageRef);
+				await updateDoc(doc(db, "users", emails), {
+					aadharNo: aadharNo,
+					aadharUrl: url,
+				});
+				setAadharNo("");
+				setAadharPic(
+					"https://ik.imagekit.io/xji6otwwkb/ESM/Adhaar-Card-Sample-Vector-File-sdfied.png?updatedAt=1688543664066")
+				setLoading(false);
+				setTimeout(() => {
+					setPhotoDetail(true);
+				}, 1500);
+				toast.success("Aadhar Uploaded Succesfully");
+			}
+		} catch (error) {
+			toast.error(error.message);
+			setDetails(initialValues);
+			setLoading(false);
+		}
+	}
+
 	return (
 		<>
-			{emailPass ? (
+			{!emailPass ? (
 				<div className="flex flex-col justify-center items-center h-screen">
 					<div className="w-screen md:w-1/2">
 						<div className='form rounded-md'>
@@ -237,7 +279,7 @@ const RegisterForm = () => {
 			)
 				: (
 					<div>
-						{aadharDetail ? (
+						{!aadharDetail ? (
 							<div className="flex flex-col justify-center items-center h-screen">
 								<div className="w-screen md:w-1/2">
 									<div className="form">
@@ -342,7 +384,6 @@ const RegisterForm = () => {
 												value={details.panNo}
 											/>
 										</div>
-										{/* <Link href="/Register/AadharCard"> */}
 										<div className="btn mb-2">
 											<button onClick={add} className="button2">
 												{loading ? (
@@ -364,57 +405,94 @@ const RegisterForm = () => {
 							</div >
 						)
 							: (
-								<div className="flex flex-col justify-center items-center h-screen">
-									<div className="w-screen md:w-1/2">
-										<div className="form">
-											<p id="heading">Upload Your Aadhar Card</p>
-											<div className="field">
-												<svg
-													className="input-icon"
-													xmlns="http://www.w3.org/2000/svg"
-													width="16"
-													height="16"
-													fill="currentColor"
-													viewBox="0 0 16 16"
-												>
-													<path d="M13.106 7.222c0-2.967-2.249-5.032-5.482-5.032-3.35 0-5.646 2.318-5.646 5.702 0 3.493 2.235 5.708 5.762 5.708.862 0 1.689-.123 2.304-.335v-.862c-.43.199-1.354.328-2.29.328-2.926 0-4.813-1.88-4.813-4.798 0-2.844 1.921-4.881 4.594-4.881 2.735 0 4.608 1.688 4.608 4.156 0 1.682-.554 2.769-1.416 2.769-.492 0-.772-.28-.772-.76V5.206H8.923v.834h-.11c-.266-.595-.881-.964-1.6-.964-1.4 0-2.378 1.162-2.378 2.823 0 1.737.957 2.906 2.379 2.906.8 0 1.415-.39 1.709-1.087h.11c.081.67.703 1.148 1.503 1.148 1.572 0 2.57-1.415 2.57-3.643zm-7.177.704c0-1.197.54-1.907 1.456-1.907.93 0 1.524.738 1.524 1.907S8.308 9.84 7.371 9.84c-.895 0-1.442-.725-1.442-1.914z"></path>
-												</svg>
-												<input
-													autocomplete="off"
-													placeholder="Aadhar No."
-													className="input-field"
-													type="text"
-												/>
-											</div>
+								<div>
+									{!photoDetail ? (
+										<div className="flex flex-col justify-center items-center h-screen">
+											<div className="w-screen md:w-1/2">
+												<div className="form">
+													<p id="heading">Upload Your Aadhar Card</p>
+													<div className="field">
+														<svg
+															className="input-icon"
+															xmlns="http://www.w3.org/2000/svg"
+															width="16"
+															height="16"
+															fill="currentColor"
+															viewBox="0 0 16 16"
+														>
+															<path d="M13.106 7.222c0-2.967-2.249-5.032-5.482-5.032-3.35 0-5.646 2.318-5.646 5.702 0 3.493 2.235 5.708 5.762 5.708.862 0 1.689-.123 2.304-.335v-.862c-.43.199-1.354.328-2.29.328-2.926 0-4.813-1.88-4.813-4.798 0-2.844 1.921-4.881 4.594-4.881 2.735 0 4.608 1.688 4.608 4.156 0 1.682-.554 2.769-1.416 2.769-.492 0-.772-.28-.772-.76V5.206H8.923v.834h-.11c-.266-.595-.881-.964-1.6-.964-1.4 0-2.378 1.162-2.378 2.823 0 1.737.957 2.906 2.379 2.906.8 0 1.415-.39 1.709-1.087h.11c.081.67.703 1.148 1.503 1.148 1.572 0 2.57-1.415 2.57-3.643zm-7.177.704c0-1.197.54-1.907 1.456-1.907.93 0 1.524.738 1.524 1.907S8.308 9.84 7.371 9.84c-.895 0-1.442-.725-1.442-1.914z"></path>
+														</svg>
+														<input
+															required
+															autocomplete="off"
+															placeholder="Aadhar No."
+															className="input-field"
+															type="number"
+															maxLength="12"
+															minLength="12"
+															value={aadharNo}
+															onChange={(e) => setAadharNo(e.target.value)}
+														/>
+													</div>
 
-											<label htmlFor="aad" className="flex p-5 items-center border-4 border-dashed border-white rounded-xl">
+													<label htmlFor="aad" className="flex mt-10 flex-col p-5 items-center border-4 border-dashed border-white rounded-xl">
 
-												<div className="shrink-0">
-													<img
-														className="h-48 w-fit object-contain"
-														src={aadharPic}
-														alt="Aadhar Pic"
-													/>
+														<div className="shrink-0">
+															<img
+																className="h-48 w-fit object-contain"
+																src={aadharPic}
+																alt="Aadhar Pic"
+															/>
+														</div>
+														<input
+															onChange={handleChange}
+															type="file"
+															id="aad"
+															accept="image/jpeg,image/jpg,image/png"
+															className="mx-auto mt-8 text-sm text-white file:mr-4 file:py-2 file:px-4 file:bg-[#FF671F] file:rounded-full file:border-0 file:text-sm file:font-semibold hover:file:cursor-pointer"
+														/>
+													</label>
+													<div className="btn mb-2">
+														<button onClick={aadhar} className="button2">
+															{loading ? (
+																<div className="wrapper">
+																	<div className="circle" />
+																	<div className="circle" />
+																	<div className="circle" />
+																	<div className="shadow" />
+																	<div className="shadow" />
+																	<div className="shadow" />
+																</div>
+															) : ("Save & Next")}
+
+														</button>
+													</div>
 												</div>
-												<input
-													onChange={handleChange}
-													type="file"
-													id="aad"
-													accept="image/jpeg,image/jpg,image/png"
-													className="block w-full text-sm text-white file:mr-4 file:py-2 file:px-4 file:bg-[#FF671F] file:rounded-full file:border-0 file:text-sm file:font-semibold hover:file:cursor-pointer"
-												/>
-											</label>
-											<div className="btn mb-2">
-												<button className="button2">
-													Save & Next
-												</button>
 											</div>
-										</div>
-									</div>
+										</div>)
+										: (
+											<div className="flex flex-col justify-center items-center h-screen">
+												<div className="w-1/2">
+													<div className="form">
+														<p id="heading">Upload Your Photo</p>
+
+														<label htmlFor="pic" className="flex flex-col justify-evenly items-center  border-4 border-dashed border-white  file-input ">
+															<div>
+																<span>Upload Here</span>
+																<input id="pic" className="hidden" type="file" />
+															</div>
+														</label>
+														<div className="btn mb-2">
+															<button className="button2">
+																Submit
+															</button>
+														</div>
+													</div>
+												</div>
+											</div>)}
 								</div>
 							)}
 					</div>
-
 				)}
 		</>
 	);
