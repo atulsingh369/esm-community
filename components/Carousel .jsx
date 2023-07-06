@@ -1,168 +1,86 @@
 "use client";
 import React, { useState } from "react";
-import {
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  updateProfile,
-  GoogleAuthProvider,
-  signInWithPopup,
-  sendEmailVerification,
-  onAuthStateChanged,
-} from "firebase/auth";
+import { signInWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth, db } from "../src/app/config";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "../src/store";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, getDoc } from "firebase/firestore";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import "./load.css";
 
 const Carousel = () => {
-  const [state, setState] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [passwordType, setPasswordType] = useState("password");
-
-  const provider = new GoogleAuthProvider();
 
   const dispatch = useDispatch();
   const [curUser, setCurUser] = useState({
-    name: "",
     email: "",
     password: "",
   });
 
+  const [url, setURL] = useState("");
+
   const user = useSelector((state) => state.user);
 
-  const signUp = async () => {
+  const signIn = async () => {
     setLoading(true);
     if (!curUser.email || !curUser.password) {
-      toast.error("Enter Required Details");
+      toast.error("Enter Credentials");
       setCurUser({
-        name: "",
         email: "",
         password: "",
       });
-
-      setLoading(false);
-      setPasswordType("password");
       return;
     }
     try {
-      // await sendSignInLinkToEmail(auth, curUser.email, actionCodeSettings);
-      const credential = await createUserWithEmailAndPassword(
+      const userCredential = await signInWithEmailAndPassword(
         auth,
         curUser.email,
         curUser.password
       );
-      const res = credential.user;
-      await updateProfile(res, {
-        displayName: curUser.name,
+      const docRef = doc(db, "users", curUser.email);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        setURL(docSnap.data().photoURL);
+      } else {
+        toast.error("Data not Found");
+      }
+      await updateProfile(userCredential.user, {
+        photoURL: url,
       });
-      await sendEmailVerification(res);
-      await setDoc(doc(db, "users", res.email), {
-        uid: res.uid,
-        displayName: res.displayName,
-        photoURL: res.photoURL,
-        email: res.email,
-      });
-      setState(!state);
+
+      const res = userCredential.user;
+      dispatch(setUser(res));
+      toast.success(`Welcome ${res.displayName}`);
       setCurUser({
-        name: "",
         email: "",
         password: "",
       });
-      const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-        if (currentUser && currentUser.uid === user.uid) {
-          currentUser.reload();
-          if (currentUser.emailVerified) {
-            // Email is verified, do nothing
-            unsubscribe(); // Stop listening for changes
-          } else {
-            // Email is not verified, delete the user
-            deleteDoc(doc(db, "users", user.email));
-            currentUser.delete();
-            toast.error("Email not verified, account deleted.");
-            unsubscribe(); // Stop listening for changes
-          }
-        }
-      });
-      toast.success("Registerd Succesfully");
+      setLoading(false);
     } catch (error) {
       toast.error(error.code);
-      console.log(error);
       setCurUser({
-        name: "",
         email: "",
         password: "",
       });
+      setLoading(false);
     }
   };
 
-  const signIn = async () => {
-    setLoading(true);
-    await signInWithEmailAndPassword(auth, curUser.email, curUser.password)
-      .then((userCredential) => {
-        const res = userCredential.user;
-        dispatch(setUser(res));
-        toast.success("Logined sucessfuly");
-        setCurUser({
-          email: "",
-          password: "",
-        });
-      })
-      .catch((error) => {
-        toast.error(error.code);
-        setCurUser({
-          email: "",
-          password: "",
-        });
-        setLoading(false);
-        setPasswordType("password");
-      });
-  };
-
-  const googleLogin = async () => {
-    await signInWithPopup(auth, provider)
-      .then((result) => {
-        // This gives you a Google Access Token. You can use it to access the Google API.
-        const credential = GoogleAuthProvider.credentialFromResult(result);
-        const token = credential.accessToken;
-        // The signed-in user info.
-        const user = result.user;
-        // IdP data available using getAdditionalUserInfo(result)
-        dispatch(setUser(user));
-
-        setDoc(doc(db, "users", user.email), {
-          uid: user.uid,
-          displayName: user.displayName,
-          photoURL: user.photoURL,
-          email: user.email,
-        });
-      })
-      .catch((error) => {
-        // Handle Errors here.
-        // The email of the user's account used.
-        const email = error.customData.email;
-        // The AuthCredential type that was used.
-        const credential = GoogleAuthProvider.credentialFromError(error);
-        setCurUser({
-          name: "",
-          email: "",
-          password: "",
-        });
-      });
-  };
-
-  const changeState = () => setState(!state);
-
   return (
     <>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 p-3">
+      <div
+        className={`${
+          !user
+            ? "grid grid-cols-1 md:grid-cols-2 gap-3 p-3"
+            : "flex justify-center p-3 items-center"
+        }`}>
         <div className="p-5 border-4 border-[#FF671F] border-dashed rounded-lg">
           <div className="carousel  ">
             <div id="slide1" className="carousel-item relative h-96 w-full">
               <img
                 src="https://ik.imagekit.io/e5ixuxrlb/esm/carousel-1.jpg?updatedAt=1684263033199"
-                className="w-full image-full"
+                className="object-contain mx-auto"
               />
               <div className="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
                 <a href="#slide4" className="btn btn-circle">
@@ -176,7 +94,7 @@ const Carousel = () => {
             <div id="slide2" className="carousel-item h-96 relative w-full">
               <img
                 src="https://ik.imagekit.io/e5ixuxrlb/esm/sds.jpg?updatedAt=1684843998205"
-                className="w-full"
+                className="object-contain mx-auto"
               />
               <div className="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
                 <a href="#slide1" className="btn btn-circle">
@@ -190,7 +108,7 @@ const Carousel = () => {
             <div id="slide3" className="carousel-item h-96 relative w-full">
               <img
                 src="https://ik.imagekit.io/e5ixuxrlb/esm/sa.jpg?updatedAt=1684843994819"
-                className="w-full"
+                className="object-contain mx-auto"
               />
               <div className="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
                 <a href="#slide2" className="btn btn-circle">
@@ -204,7 +122,7 @@ const Carousel = () => {
             <div id="slide4" className="carousel-item h-96 relative w-full">
               <img
                 src="https://ik.imagekit.io/e5ixuxrlb/esm/WhatsApp_Image_2023-04-28_at_10.06.28.jpg?updatedAt=1684844000866"
-                className="w-full"
+                className="object-contain mx-auto"
               />
               <div className="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
                 <a href="#slide3" className="btn btn-circle">
@@ -217,11 +135,11 @@ const Carousel = () => {
             </div>
           </div>
         </div>
+
         {!user && (
           <div className="w-full border-4 border-[#FF671F] border-dashed rounded-lg flex flex-col gap-2 justify-center items-center p-5">
-            <div className="form w-full rounded-md h-96">
-              <p id="heading">Log In</p>
-
+            <div className="form w-full space-y-6 rounded-md h-96">
+              <p id="heading">Sign In Now</p>
               <div className="field">
                 <svg
                   className="input-icon"
@@ -268,43 +186,21 @@ const Carousel = () => {
                   required
                 />
               </div>
-              {/* <div className="btn">
-                <button onClick={signIn} className="button1">
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Login&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                </button>
-                <button onClick={signUp} className="button2">
-                  Sign Up
-                </button>
-              </div> */}
-
-              <button className="button1">Log In</button>
-
-              <button className="button3">Forgot Password</button>
-              {/* {state ? (
-                <p>
-                  Not Registered Yet ?
-                  <span
-                    className="text-primary cursor-pointer"
-                    onClick={changeState}
-                  >
-                    Register
-                  </span>
-                  here..
-                </p>
-              ) : (
-                <p>
-                  Already Registered ?
-                  <span
-                    className="text-primary cursor-pointer"
-                    onClick={changeState}
-                  >
-                    Login
-                  </span>
-                  here..
-                </p>
-              )} */}
+              <button onClick={signIn} className="button1">
+                {loading ? (
+                  <div className="spinner mx-auto">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                  </div>
+                ) : (
+                  "Log In"
+                )}
+              </button>
             </div>
-            {/* <GoogleButton onClick={googleLogin} /> */}
           </div>
         )}
         <ToastContainer />

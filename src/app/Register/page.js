@@ -14,7 +14,6 @@ import { BiCurrentLocation } from 'react-icons/bi';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 
 const RegisterForm = () => {
-	// const router = useRouter();
 	const [loading, setLoading] = useState(false);
 	const [aadharPic, setAadharPic] = useState(
 		"https://ik.imagekit.io/xji6otwwkb/ESM/Adhaar-Card-Sample-Vector-File-sdfied.png?updatedAt=1688543664066"
@@ -23,7 +22,6 @@ const RegisterForm = () => {
 		"https://ik.imagekit.io/xji6otwwkb/Profile.png?updatedAt=1680849745697"
 	);
 
-	// const dispatch = useDispatch();
 	const [emails, setEmails] = useState("");
 	const [name, setName] = useState("");
 	const [image, setImage] = useState(null);
@@ -207,7 +205,7 @@ const RegisterForm = () => {
 				await uploadBytes(imageRef, image);
 				const url = await getDownloadURL(imageRef);
 				await updateDoc(doc(db, "users", emails), {
-					photorUrl: url,
+					photoURL: url,
 				});
 				setAvatar(
 					"https://ik.imagekit.io/xji6otwwkb/Profile.png?updatedAt=1680849745697")
@@ -469,9 +467,8 @@ const RegisterForm = () => {
 															autocomplete="off"
 															placeholder="Aadhar No."
 															className="input-field"
-															type="number"
+															type="tel"
 															maxLength="12"
-															minLength="12"
 															value={aadharNo}
 															onChange={(e) => setAadharNo(e.target.value)}
 														/>
@@ -511,12 +508,13 @@ const RegisterForm = () => {
 													</div>
 												</div>
 											</div>
+											<ToastContainer />
 										</div>
 									)
 										: (
 											<div className="flex flex-col justify-center items-center h-screen">
 												<div className="w-screen md:w-1/2">
-													<div className="form">
+													{!home ? (<div className="form">
 														<p id="heading">Upload Your Photo</p>
 
 														<label htmlFor="aad" className="flex mt-10 flex-col p-5 items-center border-4 border-dashed border-white rounded-xl">
@@ -554,11 +552,17 @@ const RegisterForm = () => {
 															</button>
 														</div>
 													</div>
-													{home && <Link rel="noopener noreferrer" target="_blank" className="text-blue-500 text-center mx-auto mt-12 font-semibold text-xl" href="/">Go to Home</Link>}
+													)
+														: (
+															<Link className="text-blue-500 text-center mx-auto mt-12 font-semibold text-md" href="/">
+																Go back to Home page
+															</Link>)}
 												</div>
+												<ToastContainer />
 											</div>)}
 								</div>
 							)}
+						<ToastContainer />
 					</div>
 				)}
 		</>

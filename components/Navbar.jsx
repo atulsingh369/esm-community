@@ -5,10 +5,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { auth } from "../src/app/config";
 import { setUser } from "../src/store";
 import Link from "next/link";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Navbar = () => {
   const dispatch = useDispatch();
-
   const [theme, setTheme] = useState(
     localStorage.getItem("theme") ? localStorage.getItem("theme") : "forest"
   );
@@ -17,7 +18,7 @@ const Navbar = () => {
     if (e.target.checked) {
       setTheme("light");
     } else {
-			setTheme("forest");
+      setTheme("forest");
     }
   };
 
@@ -25,8 +26,13 @@ const Navbar = () => {
 
   const logOut = async () => {
     await signOut(auth)
-      .then(() => {})
-      .catch((error) => {});
+      .then(() => {
+        toast.success("Log Out sucessfuly");
+      })
+      .catch((error) => {
+        toast.error(error.code);
+      });
+    setLoading(false);
     dispatch(setUser(null));
   };
 
@@ -73,6 +79,7 @@ const Navbar = () => {
           </div>
         </div>
       </div>
+
       <div className="middle-bar bg-middle-bar bg-contain h-32 ">
         <div className="flex  justify-between">
           <div className="flex justify-center items-center gap-5">
@@ -84,7 +91,6 @@ const Navbar = () => {
               />
             </Link>
             <Link href="/">
-         
               <h1 className="text-4xl text-white font-semibold bg-[#FF671F] pl-5 pr-5 pt-2 pb-2">
                 भूतपूर्व सैनिक जन कल्याण समिति
               </h1>
@@ -100,71 +106,65 @@ const Navbar = () => {
         </div>
       </div>
       <div className="bottom-bar flex justify-evenly items-center py-1 bg-white  border-b-4 border-[#FF671F] ">
-        <a
-          href=""
-          className="btn bg-white border-none text-black font-semibold text-lg hover:bg-[#046A38] hover:text-white hover:font-normal"
-        >
+        <Link
+          href="/"
+          className="btn bg-white border-none text-black font-semibold text-lg hover:bg-[#046A38] hover:text-white hover:font-normal">
           Home
-        </a>
-        <a
-          href=""
-          className="btn bg-white border-none text-black font-semibold text-lg hover:bg-[#046A38] hover:text-white hover:font-normal"
-        >
+        </Link>
+        <Link
+          href="/"
+          className="btn bg-white border-none text-black font-semibold text-lg hover:bg-[#046A38] hover:text-white hover:font-normal">
           About Us
-        </a>
-        <a
-          href=""
-          className="btn bg-white border-none text-black font-semibold text-lg hover:bg-[#046A38] hover:text-white hover:font-normal"
-        >
+        </Link>
+        <Link
+          href="/"
+          className="btn bg-white border-none text-black font-semibold text-lg hover:bg-[#046A38] hover:text-white hover:font-normal">
           How We Are
-        </a>
-        <a
-          href=""
-          className="btn bg-white border-none text-black font-semibold text-lg hover:bg-[#046A38] hover:text-white hover:font-normal"
-        >
+        </Link>
+        <Link
+          href="/"
+          className="btn bg-white border-none text-black font-semibold text-lg hover:bg-[#046A38] hover:text-white hover:font-normal">
           Gallery
-        </a>
+        </Link>
         {!user ? (
           <div className="flex ">
             <Link
               href="/Register"
-              className="btn bg-white border-none text-black font-semibold text-lg hover:bg-[#046A38] hover:text-white hover:font-normal"
-            >
+              rel="noopener noreferrer"
+              target="_blank"
+              className="btn bg-white border-none text-black font-semibold text-lg hover:bg-[#046A38] hover:text-white hover:font-normal">
               Sign Up
             </Link>
           </div>
         ) : (
-          <div className="dropdown dropdown-hover dropdown-end">
-            <span
+          <div className="dropdown dropdown-hover">
+            <label
               tabIndex={0}
-              className="flex btn bg-white border-none text-black font-semibold text-lg hover:bg-[#046A38] hover:text-white hover:font-normal"
-            >
+              className="flex btn bg-white border-none text-black font-semibold text-lg hover:bg-[#046A38] hover:text-white hover:font-normal">
               <span id="hello">
-             
                 Hi&nbsp;{user.displayName}&nbsp;&nbsp;&nbsp;
               </span>
               <div className="avatar">
                 <div className="w-9 rounded-full">
-                  {user.photoURL && <img src={user.photoURL} />}
-                  {!user.photoURL && (
+                  {user.photoURL ? (
+                    <img src={user.photoURL} />
+                  ) : (
                     <img src="https://ik.imagekit.io/xji6otwwkb/Profile.png?updatedAt=1680849745697" />
                   )}
                 </div>
               </div>
-            </span>
+            </label>
             <ul
               tabIndex={0}
-              className="dropdown-content menu divide-y-2 divide-base-300 shadow bg-base-100 rounded-box w-52"
-            >
-              <li>
-                <a href="">Profile</a>
-              </li>
-              <li>
-                <span onClick={logOut}>Logout</span>
+              className="dropdown-content flex flex-col z-[1] menu p-2 bg-base-100 rounded-box w-52">
+              <li></li>
+              <li className="cursor-pointer" onClick={logOut}>
+                Logout
               </li>
             </ul>
           </div>
         )}
+        <ToastContainer />
       </div>
     </>
   );
