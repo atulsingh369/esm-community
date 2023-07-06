@@ -1,5 +1,5 @@
 "use client";
-import { useRouter } from 'next/router';
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -54,6 +54,7 @@ const RegisterForm = () => {
 	const [emailPass, setEmailPass] = useState(false);
 	const [aadharDetail, setAadharDetail] = useState(false);
 	const [photoDetail, setPhotoDetail] = useState(false);
+	const [home, setHome] = useState(false);
 
 
 	// Registering User
@@ -174,6 +175,8 @@ const RegisterForm = () => {
 					"https://ik.imagekit.io/xji6otwwkb/ESM/Adhaar-Card-Sample-Vector-File-sdfied.png?updatedAt=1688543664066")
 				setLoading(false);
 				setImage(null);
+				setAvatar(
+					"https://ik.imagekit.io/xji6otwwkb/Profile.png?updatedAt=1680849745697");
 				setTimeout(() => {
 					setPhotoDetail(true);
 				}, 1500);
@@ -195,7 +198,7 @@ const RegisterForm = () => {
 			if (!image) {
 				toast.error("Enter Details");
 				setAvatar(
-					"https://ik.imagekit.io/xji6otwwkb/Profile.png?updatedAt=1680849745697")
+					"https://ik.imagekit.io/xji6otwwkb/Profile.png?updatedAt=1680849745697");
 				setLoading(false);
 				return;
 			}
@@ -209,9 +212,7 @@ const RegisterForm = () => {
 				setAvatar(
 					"https://ik.imagekit.io/xji6otwwkb/Profile.png?updatedAt=1680849745697")
 				setLoading(false);
-				setTimeout(() => {
-					// router.push('/');
-				}, 1500);
+				setHome(true);
 				toast.success("Photo Uploaded Succesfully");
 			}
 		} catch (error) {
@@ -514,7 +515,7 @@ const RegisterForm = () => {
 									)
 										: (
 											<div className="flex flex-col justify-center items-center h-screen">
-												<div className="w-1/2">
+												<div className="w-screen md:w-1/2">
 													<div className="form">
 														<p id="heading">Upload Your Photo</p>
 
@@ -546,11 +547,14 @@ const RegisterForm = () => {
 																		<div className="shadow" />
 																		<div className="shadow" />
 																	</div>
-																) : ("Save & Next")}
+																) : (
+																	"Save & Next"
+																)}
 
 															</button>
 														</div>
 													</div>
+													{home && <Link rel="noopener noreferrer" target="_blank" className="text-blue-500 text-center mx-auto mt-12 font-semibold text-xl" href="/">Go to Home</Link>}
 												</div>
 											</div>)}
 								</div>
