@@ -14,7 +14,7 @@ import { BiCurrentLocation } from 'react-icons/bi';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 
 const RegisterForm = () => {
-	const router = useRouter();
+	// const router = useRouter();
 	const [loading, setLoading] = useState(false);
 	const [aadharPic, setAadharPic] = useState(
 		"https://ik.imagekit.io/xji6otwwkb/ESM/Adhaar-Card-Sample-Vector-File-sdfied.png?updatedAt=1688543664066"
@@ -210,7 +210,7 @@ const RegisterForm = () => {
 					"https://ik.imagekit.io/xji6otwwkb/Profile.png?updatedAt=1680849745697")
 				setLoading(false);
 				setTimeout(() => {
-					router.push('/');
+					// router.push('/');
 				}, 1500);
 				toast.success("Photo Uploaded Succesfully");
 			}
@@ -224,7 +224,7 @@ const RegisterForm = () => {
 
 	return (
 		<>
-			{emailPass ? (
+			{!emailPass ? (
 				<div className="flex flex-col justify-center items-center h-screen">
 					<div className="w-screen md:w-1/2">
 						<div className='form rounded-md'>
@@ -320,7 +320,7 @@ const RegisterForm = () => {
 			)
 				: (
 					<div>
-						{aadharDetail ? (
+						{!aadharDetail ? (
 							<div className="flex flex-col justify-center items-center h-screen">
 								<div className="w-screen md:w-1/2">
 									<div className="form">
@@ -447,7 +447,7 @@ const RegisterForm = () => {
 						)
 							: (
 								<div>
-									{photoDetail ? (
+									{!photoDetail ? (
 										<div className="flex flex-col justify-center items-center h-screen">
 											<div className="w-screen md:w-1/2">
 												<div className="form">
@@ -510,7 +510,8 @@ const RegisterForm = () => {
 													</div>
 												</div>
 											</div>
-										</div>)
+										</div>
+									)
 										: (
 											<div className="flex flex-col justify-center items-center h-screen">
 												<div className="w-1/2">
