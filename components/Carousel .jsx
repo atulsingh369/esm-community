@@ -1,17 +1,17 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { signInWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth, db } from "../src/app/config";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "../src/store";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, onSnapshot } from "firebase/firestore";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./load.css";
 
 const Carousel = () => {
   const [loading, setLoading] = useState(false);
-
+  const [data, setData] = useState(null);
   const dispatch = useDispatch();
   const [curUser, setCurUser] = useState({
     email: "",
@@ -32,29 +32,29 @@ const Carousel = () => {
       });
       return;
     }
-		try {
-			//User is logined here
+    try {
+      //User is logined here
       const userCredential = await signInWithEmailAndPassword(
         auth,
         curUser.email,
         curUser.password
-			);
-			
-			//User's data is fetched from firestroe
+      );
+
+      //User's data is fetched from firestroe
       const docRef = doc(db, "users", curUser.email);
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
         setURL(docSnap.data().photoURL);
       } else {
         toast.error("Data not Found");
-			}
-			
-			//User's present profile is updated with URL got from firestore
+      }
+
+      //User's present profile is updated with URL got from firestore
       await updateProfile(userCredential.user, {
         photoURL: url,
       });
 
-			//User is dispatched to redux to login
+      //User is dispatched to redux to login
       const res = userCredential.user;
       dispatch(setUser(res));
       toast.success(`Welcome ${res.displayName}`);
@@ -73,6 +73,19 @@ const Carousel = () => {
     }
   };
 
+  // Getting data
+  const docRef = doc(db, "carousel", "images");
+
+  useEffect(() => {
+    const unsub = onSnapshot(docRef, (doc) => {
+      setData(doc.data().images);
+    });
+
+    return () => {
+      unsub;
+    };
+  }, []);
+
   return (
     <>
       <div
@@ -81,65 +94,43 @@ const Carousel = () => {
             ? "grid grid-cols-1 md:grid-cols-2 gap-3 p-3"
             : "flex justify-center p-3 my-5 items-center"
         }`}>
-        <div className="border-4 border-[white] border-dashed rounded-xl">
-          <div className="carousel  ">
-            <div id="slide1" className="carousel-item relative h-96 w-full">
-              <img
-                src="https://ik.imagekit.io/e5ixuxrlb/esm/carousel-1.jpg?updatedAt=1684263033199"
-                className="object-contain mx-auto"
-              />
-              <div className="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
-                <a href="#slide4" className="btn btn-circle">
-                  ❮
-                </a>
-                <a href="#slide2" className="btn btn-circle">
-                  ❯
-                </a>
+        <div className="carousel carousel-center p-4 space-x-8 border-4 border-white border-dashed rounded-xl">
+          {data ? (
+            <div className="moving-images items-center flex space-x-8">
+              {data.map((item) => (
+                <div className="carousel-item h-80 hover:scale-105 transition-all ease-in-out duration-300 ">
+                  <img src={item} className="rounded-box w-96" />
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="moving-images flex space-x-8">
+              <div className="carousel-item hover:scale-105 transition-all ease-in-out duration-300 ">
+                <img
+                  src="https://ik.imagekit.io/e5ixuxrlb/esm/carousel-1.jpg?updatedAt=1684263033199"
+                  className="rounded-box w-96"
+                />
+              </div>
+              <div className="carousel-item hover:scale-105 transition-all ease-in-out duration-300  ">
+                <img
+                  src="https://ik.imagekit.io/e5ixuxrlb/esm/sa.jpg?updatedAt=1684843994819"
+                  className="rounded-box w-96"
+                />
+              </div>
+              <div className="carousel-item hover:scale-105 transition-all ease-in-out duration-300  ">
+                <img
+                  src="https://ik.imagekit.io/e5ixuxrlb/esm/sds.jpg?updatedAt=1684843998205"
+                  className="rounded-box w-96"
+                />
+              </div>
+              <div className="carousel-item hover:scale-105 transition-all ease-in-out duration-300  ">
+                <img
+                  src="https://ik.imagekit.io/e5ixuxrlb/esm/WhatsApp_Image_2023-04-28_at_10.06.28.jpg?updatedAt=1684844000866"
+                  className="rounded-box w-96"
+                />
               </div>
             </div>
-            <div id="slide2" className="carousel-item h-96 relative w-full">
-              <img
-                src="https://ik.imagekit.io/e5ixuxrlb/esm/sds.jpg?updatedAt=1684843998205"
-                className="object-contain mx-auto"
-              />
-              <div className="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
-                <a href="#slide1" className="btn btn-circle">
-                  ❮
-                </a>
-                <a href="#slide3" className="btn btn-circle">
-                  ❯
-                </a>
-              </div>
-            </div>
-            <div id="slide3" className="carousel-item h-96 relative w-full">
-              <img
-                src="https://ik.imagekit.io/e5ixuxrlb/esm/sa.jpg?updatedAt=1684843994819"
-                className="object-contain mx-auto"
-              />
-              <div className="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
-                <a href="#slide2" className="btn btn-circle">
-                  ❮
-                </a>
-                <a href="#slide4" className="btn btn-circle">
-                  ❯
-                </a>
-              </div>
-            </div>
-            <div id="slide4" className="carousel-item h-96 relative w-full">
-              <img
-                src="https://ik.imagekit.io/e5ixuxrlb/esm/WhatsApp_Image_2023-04-28_at_10.06.28.jpg?updatedAt=1684844000866"
-                className="object-contain mx-auto"
-              />
-              <div className="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
-                <a href="#slide3" className="btn btn-circle">
-                  ❮
-                </a>
-                <a href="#slide1" className="btn btn-circle">
-                  ❯
-                </a>
-              </div>
-            </div>
-          </div>
+          )}
         </div>
 
         {!user && (
@@ -216,3 +207,31 @@ const Carousel = () => {
 };
 
 export default Carousel;
+
+{
+  /* 
+	<div className="carousel-item hover:scale-105 transition-all ease-in-out duration-300 ">
+                <img
+                  src="https://ik.imagekit.io/e5ixuxrlb/esm/carousel-1.jpg?updatedAt=1684263033199"
+                  className="rounded-box w-96"
+                />
+              </div>
+	<div className="carousel-item hover:scale-105 transition-all ease-in-out duration-300  ">
+              <img
+                src="https://ik.imagekit.io/e5ixuxrlb/esm/sa.jpg?updatedAt=1684843994819"
+                className="rounded-box w-96"
+              />
+            </div>
+            <div className="carousel-item hover:scale-105 transition-all ease-in-out duration-300  ">
+              <img
+                src="https://ik.imagekit.io/e5ixuxrlb/esm/sds.jpg?updatedAt=1684843998205"
+                className="rounded-box w-96"
+              />
+            </div>
+            <div className="carousel-item hover:scale-105 transition-all ease-in-out duration-300  ">
+              <img
+                src="https://ik.imagekit.io/e5ixuxrlb/esm/WhatsApp_Image_2023-04-28_at_10.06.28.jpg?updatedAt=1684844000866"
+                className="rounded-box w-96"
+              />
+            </div> */
+}

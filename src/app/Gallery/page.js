@@ -86,7 +86,6 @@ const Gallery = () => {
 
 	return (
 		<>
-
 			<div className="p-5">
 				<h1 id="heading1">
 					Our Memories
@@ -94,7 +93,7 @@ const Gallery = () => {
 				{data ? (
 					<ul className="flex items-center justify-center flex-wrap">
 						{data.map((item) => (
-							<li className="h-96 m-2 grow p-3 border-2 items-center border-white rounded-xl">
+							<li className="h-96 m-2 hover:scale-105 transition-all ease-in-out duration-300 grow p-3 border-2 items-center border-white rounded-xl">
 								<img
 									src={item}
 									alt="Gallery"
@@ -108,6 +107,7 @@ const Gallery = () => {
 				) : (
 					<p>No Images to Show</p>
 				)}
+				<ToastContainer />
 			</div>
 
 			{/* Upload Gallery Images */}
@@ -146,6 +146,7 @@ const Gallery = () => {
 				</button>
 				<ToastContainer />
 			</div>
+			<ToastContainer />
 		</>
 	);
 };

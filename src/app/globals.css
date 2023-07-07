@@ -195,9 +195,22 @@
 .moving-text {
   animation: rightToLeft 50s infinite ease-in-out;
 }
+
+.moving-images {
+  animation: rightToLeftImages 20s infinite linear;
+}
+
 @keyframes rightToLeft {
   0% {
     translate: 100%;
+  }
+  100% {
+    translate: -100%;
+  }
+}
+@keyframes rightToLeftImages {
+  0% {
+    translate: 150%;
   }
   100% {
     translate: -100%;
