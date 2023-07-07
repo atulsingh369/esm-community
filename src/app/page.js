@@ -3,7 +3,6 @@ import Carousel from "../../components/Carousel ";
 import Footer from "../../components/Footer";
 import MovingText from "../../components/MovingText";
 import Navbar from "../../components/Navbar";
-import RegisterForm from "../app/Register/page";
 import authReducer from "../store";
 import { configureStore } from "@reduxjs/toolkit";
 import { Provider } from "react-redux";
@@ -19,7 +18,6 @@ import {
 } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import { PersistGate } from "redux-persist/integration/react";
-import Gallery from "../../components/Gallery";
 
 const persistConfig = { key: "root", storage, version: 1 };
 const persistedReducer = persistReducer(persistConfig, authReducer);
@@ -41,7 +39,6 @@ export default function Home() {
 					<Navbar />
 					<Carousel />
 					<MovingText />
-					<Gallery />
 					<Footer />
 				</PersistGate>
 			</Provider>

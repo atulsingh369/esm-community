@@ -32,23 +32,29 @@ const Carousel = () => {
       });
       return;
     }
-    try {
+		try {
+			//User is logined here
       const userCredential = await signInWithEmailAndPassword(
         auth,
         curUser.email,
         curUser.password
-      );
+			);
+			
+			//User's data is fetched from firestroe
       const docRef = doc(db, "users", curUser.email);
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
         setURL(docSnap.data().photoURL);
       } else {
         toast.error("Data not Found");
-      }
+			}
+			
+			//User's present profile is updated with URL got from firestore
       await updateProfile(userCredential.user, {
         photoURL: url,
       });
 
+			//User is dispatched to redux to login
       const res = userCredential.user;
       dispatch(setUser(res));
       toast.success(`Welcome ${res.displayName}`);

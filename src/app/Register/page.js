@@ -225,7 +225,7 @@ const RegisterForm = () => {
 		<>
 			{!emailPass ? (
 				<div className="flex flex-col justify-center items-center h-screen">
-					<div className="w-screen md:w-1/2">
+					<div className="w-screen md:w-1/2 h-screen md:h-fit">
 						<div className='form rounded-md'>
 							<p id="heading">Sign Up</p>
 							<div className="field">                              {/*Name*/}

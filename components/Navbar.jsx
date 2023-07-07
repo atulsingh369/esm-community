@@ -121,7 +121,9 @@ const Navbar = () => {
           How We Are
         </Link>
         <Link
-          href="/"
+          href="/Gallery"
+          rel="noopener noreferrer"
+          target="_blank"
           className="btn bg-white border-none text-black font-semibold text-lg hover:bg-[#046A38] hover:text-white hover:font-normal">
           Gallery
         </Link>
