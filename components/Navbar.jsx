@@ -32,7 +32,6 @@ const Navbar = () => {
       .catch((error) => {
         toast.error(error.code);
       });
-    setLoading(false);
     dispatch(setUser(null));
   };
 

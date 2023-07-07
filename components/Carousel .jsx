@@ -73,9 +73,9 @@ const Carousel = () => {
         className={`${
           !user
             ? "grid grid-cols-1 md:grid-cols-2 gap-3 p-3"
-            : "flex justify-center p-3 items-center"
+            : "flex justify-center p-3 my-5 items-center"
         }`}>
-        <div className="p-5 border-4 border-[#FF671F] border-dashed rounded-lg">
+        <div className="border-4 border-[white] border-dashed rounded-xl">
           <div className="carousel  ">
             <div id="slide1" className="carousel-item relative h-96 w-full">
               <img
@@ -137,7 +137,7 @@ const Carousel = () => {
         </div>
 
         {!user && (
-          <div className="w-full border-4 border-[#FF671F] border-dashed rounded-lg flex flex-col gap-2 justify-center items-center p-5">
+          <div className="w-full border-4 border-[white] border-dashed rounded-lg flex flex-col gap-2 justify-center items-center p-5">
             <div className="form w-full space-y-6 rounded-md h-96">
               <p id="heading">Sign In Now</p>
               <div className="field">
