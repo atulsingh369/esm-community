@@ -116,9 +116,11 @@ const Navbar = () => {
           About Us
         </Link>
         <Link
-          href="/"
+          href="/Members"
+          rel="noopener noreferrer"
+          target="_blank"
           className="btn bg-white border-none text-black font-semibold text-lg hover:bg-[#046A38] hover:text-white hover:font-normal">
-          How We Are
+          Our Members
         </Link>
         <Link
           href="/Gallery"

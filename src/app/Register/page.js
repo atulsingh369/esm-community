@@ -125,7 +125,8 @@ const RegisterForm = () => {
 					serviceNo: details.serviceNo,
 					serviceField: details.serviceField,
 					address: details.address,
-					panNo: details.panNo
+					panNo: details.panNo,
+					role: "user",
 				});
 				setDetails(initialValues);
 				setLoading(false);

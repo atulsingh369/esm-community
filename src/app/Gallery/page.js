@@ -93,11 +93,11 @@ const Gallery = () => {
 				{data ? (
 					<ul className="flex items-center justify-center flex-wrap">
 						{data.map((item) => (
-							<li className="h-96 m-2 hover:scale-105 transition-all ease-in-out duration-300 grow p-3 border-2 items-center border-white rounded-xl">
+							<li className="h-72 m-3 hover:scale-105 transition-all ease-in-out duration-300 grow p-2 border-4 items-center border-white rounded-box">
 								<img
 									src={item}
 									alt="Gallery"
-									className="max-h-full min-w-full object-cover align-bottom"
+									className="max-h-full min-w-full rounded-box object-cover align-bottom"
 								/>
 							</li>
 						))}
@@ -105,7 +105,7 @@ const Gallery = () => {
 						<li className="flex grow-10"></li>
 					</ul>
 				) : (
-					<p>No Images to Show</p>
+						<p className="text-center text-2xl my-48">😕 No Data Found 😕</p>
 				)}
 				<ToastContainer />
 			</div>
@@ -152,41 +152,3 @@ const Gallery = () => {
 };
 
 export default Gallery;
-
-// Load More button for url display
-{
-	/* const imagePerRow = 4;
-export const ImageGallery = ({ imageGallery }) => {
-	const [next, setNext] = useState(imagePerRow);
-const handleMoreImage = () => {
-		setNext(next + imagePerRow);
-	};
-return (
-		<>
-			<div className="gap-y-4 flex flex-wrap justify-center">
-				{imageGallery?.slice(0, next)?.map((image, index) => {
-					return (
-						<div
-							key={index}
-							className="px-2.5 md:px-0"
-						>
-							<img
-								className="cursor-pointer"
-								src={image?.url}
-							/>
-						</div>
-					);
-				})}
-			 {next < imageGallery?.length && (
-					<Button
-						className="mt-4"
-						onClick={handleMoreImage}
-					>
-						Load more
-					</Button>
-				)}
-			</div>
-		</>
-	);
-}; */
-}
