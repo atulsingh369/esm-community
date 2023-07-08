@@ -1,13 +1,19 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { signInWithEmailAndPassword, updateProfile } from "firebase/auth";
+import {
+  GoogleAuthProvider,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+  updateProfile,
+} from "firebase/auth";
 import { auth, db } from "../src/app/config";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "../src/store";
-import { doc, getDoc, onSnapshot } from "firebase/firestore";
+import { doc, getDoc, onSnapshot, setDoc } from "firebase/firestore";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./load.css";
+import GoogleButton from "react-google-button";
 
 const Carousel = () => {
   const [loading, setLoading] = useState(false);
@@ -17,6 +23,8 @@ const Carousel = () => {
     email: "",
     password: "",
   });
+
+  const provider = new GoogleAuthProvider();
 
   const [url, setURL] = useState("");
   const [role, setRole] = useState("");
@@ -76,6 +84,85 @@ const Carousel = () => {
     }
   };
 
+  const googleLogin = async () => {
+    try {
+      const result = await signInWithPopup(auth, provider);
+      // This gives you a Google Access Token. You can use it to access the Google API.
+      const credential = GoogleAuthProvider.credentialFromResult(result);
+      const token = credential.accessToken;
+      // The signed-in user info.
+      const user = result.user;
+
+      setDoc(doc(db, "users", user.email), {
+        uid: user.uid,
+        displayName: user.displayName,
+        photoURL: user.photoURL,
+        email: user.email,
+        role: "user",
+      });
+      toast.success(`Welcome ${user.displayName}`);
+      // IdP data available using getAdditionalUserInfo(result)
+      dispatch(setUser(user));
+    } catch (error) {
+      // Handle Errors here.
+      toast.error(error);
+
+      // The AuthCredential type that was used.
+      const credential = GoogleAuthProvider.credentialFromError(error);
+      setCurUser({
+        email: "",
+        password: "",
+      });
+    }
+    //     await signInWithPopup(auth, provider)
+    //       .then((result) => {
+    //         // This gives you a Google Access Token. You can use it to access the Google API.
+    //         const credential = GoogleAuthProvider.credentialFromResult(result);
+    //         const token = credential.accessToken;
+    //         // The signed-in user info.
+    // 				const user = result.user;
+
+    // //User's data is fetched from firestroe
+    //       const docRef = doc(db, "users", curUser.email);
+    //       const docSnap = await getDoc(docRef);
+    //       if (docSnap.exists()) {
+    //         setURL(docSnap.data().photoURL);
+    //         setRole(docSnap.data().role);
+    //       } else {
+    //         toast.error("Data not Found");
+    //       }
+
+    //       //User's present profile is updated with URL got from firestore
+    //       await updateProfile(userCredential.user, {
+    //         photoURL: url,
+    //         role: role,
+    //       });
+
+    //         toast.success(`Welcome ${user.displayName}`);
+    //         // IdP data available using getAdditionalUserInfo(result)
+    //         dispatch(setUser(user));
+
+    //         setDoc(doc(db, "users", user.email), {
+    //           uid: user.uid,
+    //           displayName: user.displayName,
+    //           photoURL: user.photoURL,
+    //           email: user.email,
+    //         });
+    //       })
+    //       .catch((error) => {
+    //         // Handle Errors here.
+    //         toast.error(error);
+    //         // The email of the user's account used.
+    //         const email = error.customData.email;
+    //         // The AuthCredential type that was used.
+    //         const credential = GoogleAuthProvider.credentialFromError(error);
+    //         setCurUser({
+    //           email: "",
+    //           password: "",
+    //         });
+    //       });
+  };
+
   // Getting data
   const docRef = doc(db, "carousel", "images");
 
@@ -94,8 +181,8 @@ const Carousel = () => {
       <div
         className={`${
           !user
-            ? "grid grid-cols-1 md:grid-cols-2 gap-3 p-3"
-            : "flex justify-center p-3 my-5 items-center"
+            ? "grid grid-cols-1 md:grid-cols-2 gap-3 p-3 transition-all ease-in-out duration-300"
+            : "flex justify-center p-3 my-5 items-center transition-all ease-in-out duration-300"
         }`}>
         <div className="carousel carousel-center p-4 space-x-8 border-4 border-white border-dashed rounded-xl">
           {data ? (
@@ -138,7 +225,7 @@ const Carousel = () => {
 
         {!user && (
           <div className="w-full border-4 border-[white] border-dashed rounded-lg flex flex-col gap-2 justify-center items-center p-5">
-            <div className="form w-full space-y-6 rounded-md h-96">
+            <div className="form w-full space-y-5 rounded-md h-96">
               <p id="heading">Sign In Now</p>
               <div className="field">
                 <svg
@@ -200,12 +287,13 @@ const Carousel = () => {
                   "Log In"
                 )}
               </button>
+              {/* <div className="mx-auto"> -- OR -- </div>
+              <GoogleButton className="mx-auto" onClick={googleLogin} /> */}
             </div>
           </div>
         )}
         <ToastContainer />
-			</div>
-	
+      </div>
     </>
   );
 };

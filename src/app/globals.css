@@ -97,6 +97,13 @@
   font-size: 2.2em;
 }
 
+#heading2 {
+  text-align: center;
+  margin: 1em;
+  color: rgb(255, 255, 255);
+  font-size: 1.2em;
+}
+
 .field {
   display: flex;
   align-items: center;
