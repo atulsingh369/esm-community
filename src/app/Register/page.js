@@ -1,5 +1,5 @@
 "use client";
-import {  useState } from "react";
+import { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { doc, setDoc, updateDoc } from "firebase/firestore";
@@ -226,8 +226,8 @@ const RegisterForm = () => {
 		<>
 			{!emailPass ? (
 				<div className="flex flex-col justify-center items-center h-screen">
-					<div className="w-screen md:w-1/2 h-screen md:h-fit">
-						<div className='form rounded-md'>
+					<div className="w-screen md:w-1/2">
+						<div className='form space-y-4 rounded-md'>
 							<p id="heading">Sign Up</p>
 							<div className="field">                              {/*Name*/}
 								<svg
@@ -242,7 +242,7 @@ const RegisterForm = () => {
 									required
 									autoComplete='off'
 									name="name"
-									placeholder="Enter Name"
+									placeholder="Name"
 									className="input-field"
 									type="text"
 									value={curUser.name}
@@ -298,19 +298,24 @@ const RegisterForm = () => {
 								/>
 							</div>
 
-							<button
-								onClick={signUp}
-								className="btn relative w-full flex gap-1 items-center justify-center py-2.5 text-white rounded">
-								{loading ? (
-									<div className="wrapper">
-										<div className="circle" />
-										<div className="circle" />
-										<div className="circle" />
-										<div className="shadow" />
-										<div className="shadow" />
-										<div className="shadow" />
-									</div>
-								) : ("Sign Up")}
+							<button onClick={signUp} className="button4 mt-10 w-full">
+								<span className="circle1"></span>
+								<span className="circle2"></span>
+								<span className="circle3"></span>
+								<span className="circle4"></span>
+								<span className="circle5"></span>
+								<span className="text">
+									{loading ? (
+										<div className="wrapper">
+											<div className="circle" />
+											<div className="circle" />
+											<div className="circle" />
+											<div className="shadow" />
+											<div className="shadow" />
+											<div className="shadow" />
+										</div>
+									) : ("Sign Up")}
+								</span>
 							</button>
 
 						</div>
@@ -323,7 +328,7 @@ const RegisterForm = () => {
 						{!aadharDetail ? (
 							<div className="flex flex-col justify-center items-center h-screen">
 								<div className="w-screen md:w-1/2">
-									<div className="form">
+									<div className='form space-y-4 rounded-md'>
 										<p id="heading">Fill Up Your Details</p>
 
 										<div className="field">                              {/*Phone No*/}
@@ -425,8 +430,13 @@ const RegisterForm = () => {
 												value={details.panNo}
 											/>
 										</div>
-										<div className="btn mb-2">
-											<button onClick={add} className="button2">
+										<button onClick={add} className="button4 mt-10 w-full">
+											<span className="circle1"></span>
+											<span className="circle2"></span>
+											<span className="circle3"></span>
+											<span className="circle4"></span>
+											<span className="circle5"></span>
+											<span className="text">
 												{loading ? (
 													<div className="wrapper">
 														<div className="circle" />
@@ -437,9 +447,8 @@ const RegisterForm = () => {
 														<div className="shadow" />
 													</div>
 												) : ("Save & Next")}
-
-											</button>
-										</div>
+											</span>
+										</button>
 									</div>
 								</div>
 								<ToastContainer />
@@ -492,8 +501,13 @@ const RegisterForm = () => {
 															className="mx-auto mt-8 text-sm text-white file:mr-4 file:py-2 file:px-4 file:bg-[#FF671F] file:rounded-full file:border-0 file:text-sm file:font-semibold hover:file:cursor-pointer"
 														/>
 													</label>
-													<div className="btn mb-2">
-														<button onClick={aadhar} className="button2">
+													<button onClick={aadhar} className="button4 mt-10 w-full">
+														<span className="circle1"></span>
+														<span className="circle2"></span>
+														<span className="circle3"></span>
+														<span className="circle4"></span>
+														<span className="circle5"></span>
+														<span className="text">
 															{loading ? (
 																<div className="wrapper">
 																	<div className="circle" />
@@ -504,9 +518,8 @@ const RegisterForm = () => {
 																	<div className="shadow" />
 																</div>
 															) : ("Save & Next")}
-
-														</button>
-													</div>
+														</span>
+													</button>
 												</div>
 											</div>
 											<ToastContainer />
@@ -535,8 +548,13 @@ const RegisterForm = () => {
 																className="mx-auto mt-8 text-sm text-white file:mr-4 file:py-2 file:px-4 file:bg-[#FF671F] file:rounded-full file:border-0 file:text-sm file:font-semibold hover:file:cursor-pointer"
 															/>
 														</label>
-														<div className="btn mb-2">
-															<button onClick={photo} className="button2">
+														<button onClick={photo} className="button4 mt-10 w-full">
+															<span className="circle1"></span>
+															<span className="circle2"></span>
+															<span className="circle3"></span>
+															<span className="circle4"></span>
+															<span className="circle5"></span>
+															<span className="text">
 																{loading ? (
 																	<div className="wrapper">
 																		<div className="circle" />
@@ -546,12 +564,9 @@ const RegisterForm = () => {
 																		<div className="shadow" />
 																		<div className="shadow" />
 																	</div>
-																) : (
-																	"Save & Next"
-																)}
-
-															</button>
-														</div>
+																) : ("Save & Next")}
+															</span>
+														</button>
 													</div>
 													)
 														: (
