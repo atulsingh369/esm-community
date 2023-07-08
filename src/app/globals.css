@@ -238,6 +238,7 @@
   border-radius: 0.6rem;
   position: relative;
   cursor: pointer;
+  font-size: 1.2rem;
   overflow: hidden;
 }
 
@@ -259,7 +260,6 @@
 .button4 span:nth-child(1) {
   transform: translate(-3.3em, -4em);
   background-color: #046a38;
-  
 }
 
 .button4 span:nth-child(2) {
@@ -285,4 +285,63 @@
 .button4:hover span:not(:nth-child(6)) {
   transform: translate(-50%, -50%) scale(4);
   transition: 0.5s ease;
+}
+
+.button5 {
+  height: 50px;
+  width: 100%;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.5s ease-in-out;
+}
+
+.button5:hover {
+  box-shadow: 0.5px 0.5px 150px #252525;
+}
+
+.type1::after {
+  content: "Thanks";
+  height: 50px;
+  width: 100%;
+  background-color: #ff671f;
+  color: #fff;
+  position: absolute;
+  top: 0%;
+  left: 0%;
+  transform: translateY(50px);
+  font-size: 1.2rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.5s ease-in-out;
+}
+
+.type1::before {
+  content: "Save & Next";
+  height: 50px;
+  width: 100%;
+  background-color: #fff;
+  color: #ff671f;
+  position: absolute;
+  top: 0%;
+  left: 0%;
+  transform: translateY(0px) scale(1.2);
+  font-size: 1.2rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.5s ease-in-out;
+}
+
+.type1:hover::after {
+  transform: translateY(0) scale(1.2);
+}
+
+.type1:hover::before {
+  transform: translateY(-50px) scale(0) rotate(120deg);
 }

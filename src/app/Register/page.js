@@ -548,24 +548,7 @@ const RegisterForm = () => {
 																className="mx-auto mt-8 text-sm text-white file:mr-4 file:py-2 file:px-4 file:bg-[#FF671F] file:rounded-full file:border-0 file:text-sm file:font-semibold hover:file:cursor-pointer"
 															/>
 														</label>
-														<button onClick={photo} className="button4 mt-10 w-full">
-															<span className="circle1"></span>
-															<span className="circle2"></span>
-															<span className="circle3"></span>
-															<span className="circle4"></span>
-															<span className="circle5"></span>
-															<span className="text">
-																{loading ? (
-																	<div className="wrapper">
-																		<div className="circle" />
-																		<div className="circle" />
-																		<div className="circle" />
-																		<div className="shadow" />
-																		<div className="shadow" />
-																		<div className="shadow" />
-																	</div>
-																) : ("Save & Next")}
-															</span>
+														<button onClick={photo} className="button5 mt-10 type1">
 														</button>
 													</div>
 													)
