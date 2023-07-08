@@ -2,6 +2,9 @@
 import React, { useEffect, useState } from "react";
 import { db } from "../config";
 import { collection, onSnapshot } from "firebase/firestore";
+import FuncNavbar from "../../../components/FuncNavabr";
+import Footer from "../../../components/Footer";
+
 
 const Members = () => {
 
@@ -10,11 +13,7 @@ const Members = () => {
 	useEffect(() => {
 		const unsubscribe = onSnapshot(collection(db, "users"), (querySnapshot) => {
 			querySnapshot.forEach((doc) => {
-
-				// setData({ ...data, doc.data() })
 				setData(data => [...data, doc.data()]);
-
-				// data.push(doc.data());
 			});
 		});
 
@@ -22,11 +21,10 @@ const Members = () => {
 			unsubscribe;
 		}
 	}, [])
-
-	console.log(data);
-
 	return (
 		<>
+			<FuncNavbar />
+
 			<h1 id="heading1">Our Members</h1>
 			{data ? (
 				<div className="flex justify-center items-center flex-wrap">
@@ -47,7 +45,7 @@ const Members = () => {
 				</div>) : (
 				<p className="text-center text-2xl my-48">😕 No Data Found 😕</p>
 			)}
-
+			<Footer />
 		</>
 	)
 }

@@ -1,17 +1,17 @@
 "use client";
-import Link from "next/link";
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { doc, onSnapshot, setDoc, updateDoc } from "firebase/firestore";
+import { doc, setDoc, updateDoc } from "firebase/firestore";
 import { createUserWithEmailAndPassword, sendEmailVerification, updateProfile } from "firebase/auth";
 import { db, auth, storage } from "../config";
-import { setUser } from "../../store";
 import "./load.css"
 import { FaServicestack } from 'react-icons/fa';
 import { GiField } from 'react-icons/gi';
 import { BiCurrentLocation } from 'react-icons/bi';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
+import FuncNavbar from "../../../components/FuncNavabr";
+import Footer from "../../../components/Footer";
 
 const RegisterForm = () => {
 	const [loading, setLoading] = useState(false);
@@ -555,9 +555,7 @@ const RegisterForm = () => {
 													</div>
 													)
 														: (
-															<Link className="text-blue-500 text-center mx-auto mt-12 font-semibold text-md" href="/">
-																Go back to Home page
-															</Link>)}
+															<FuncNavbar />)}
 												</div>
 												<ToastContainer />
 											</div>)}
@@ -566,6 +564,7 @@ const RegisterForm = () => {
 						<ToastContainer />
 					</div>
 				)}
+			<Footer />
 		</>
 	);
 };

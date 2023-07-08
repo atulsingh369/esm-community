@@ -159,9 +159,16 @@ const Navbar = () => {
             </label>
             <ul
               tabIndex={0}
-              className="dropdown-content flex flex-col z-[1] menu p-2 bg-base-100 rounded-box w-52">
-              <li></li>
-              <li className="cursor-pointer" onClick={logOut}>
+              className="dropdown-content space-y-4 flex flex-col z-[1] menu p-2 bg-base-100 rounded-box w-52">
+              {user.role == "admin" && (
+                <li className="cursor-pointer hover:scale-105 transition-all my-1 mx-auto ease-in-out duration-300">
+                  Admin Panel
+                </li>
+              )}
+
+              <li
+                className="cursor-pointer hover:scale-105 transition-all my-1 mx-auto ease-in-out duration-300"
+                onClick={logOut}>
                 Logout
               </li>
             </ul>

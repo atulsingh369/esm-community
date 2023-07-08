@@ -19,6 +19,7 @@ const Carousel = () => {
   });
 
   const [url, setURL] = useState("");
+  const [role, setRole] = useState("");
 
   const user = useSelector((state) => state.user);
 
@@ -45,6 +46,7 @@ const Carousel = () => {
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
         setURL(docSnap.data().photoURL);
+        setRole(docSnap.data().role);
       } else {
         toast.error("Data not Found");
       }
@@ -52,6 +54,7 @@ const Carousel = () => {
       //User's present profile is updated with URL got from firestore
       await updateProfile(userCredential.user, {
         photoURL: url,
+        role: role,
       });
 
       //User is dispatched to redux to login
@@ -201,37 +204,10 @@ const Carousel = () => {
           </div>
         )}
         <ToastContainer />
-      </div>
+			</div>
+	
     </>
   );
 };
 
 export default Carousel;
-
-{
-  /* 
-	<div className="carousel-item hover:scale-105 transition-all ease-in-out duration-300 ">
-                <img
-                  src="https://ik.imagekit.io/e5ixuxrlb/esm/carousel-1.jpg?updatedAt=1684263033199"
-                  className="rounded-box w-96"
-                />
-              </div>
-	<div className="carousel-item hover:scale-105 transition-all ease-in-out duration-300  ">
-              <img
-                src="https://ik.imagekit.io/e5ixuxrlb/esm/sa.jpg?updatedAt=1684843994819"
-                className="rounded-box w-96"
-              />
-            </div>
-            <div className="carousel-item hover:scale-105 transition-all ease-in-out duration-300  ">
-              <img
-                src="https://ik.imagekit.io/e5ixuxrlb/esm/sds.jpg?updatedAt=1684843998205"
-                className="rounded-box w-96"
-              />
-            </div>
-            <div className="carousel-item hover:scale-105 transition-all ease-in-out duration-300  ">
-              <img
-                src="https://ik.imagekit.io/e5ixuxrlb/esm/WhatsApp_Image_2023-04-28_at_10.06.28.jpg?updatedAt=1684844000866"
-                className="rounded-box w-96"
-              />
-            </div> */
-}
