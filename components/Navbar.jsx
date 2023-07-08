@@ -2,14 +2,16 @@
 import { signOut } from "firebase/auth";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { auth } from "../src/app/config";
+import { auth, db } from "../src/app/config";
 import { setUser } from "../src/store";
 import Link from "next/link";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { doc, onSnapshot } from "firebase/firestore";
 
 const Navbar = () => {
   const dispatch = useDispatch();
+  const [data, setData] = useState(null);
   const [theme, setTheme] = useState(
     localStorage.getItem("theme") ? localStorage.getItem("theme") : "forest"
   );
@@ -35,10 +37,21 @@ const Navbar = () => {
     dispatch(setUser(null));
   };
 
+  // Getting data
+  const docRef = doc(db, "users", user.email);
+
   useEffect(() => {
     localStorage.setItem("theme", theme);
     const localTheme = localStorage.getItem("theme");
     document.querySelector("html").setAttribute("data-theme", localTheme);
+
+    const unsub = onSnapshot(docRef, (doc) => {
+      setData(doc.data());
+    });
+
+    return () => {
+      unsub;
+    };
   }, [theme]);
 
   return (
@@ -160,10 +173,19 @@ const Navbar = () => {
             <ul
               tabIndex={0}
               className="dropdown-content space-y-4 flex flex-col z-[1] menu p-2 bg-base-100 rounded-box w-52">
-              {user.role == "admin" && (
-                <li className="cursor-pointer hover:scale-105 transition-all my-1 mx-auto ease-in-out duration-300">
-                  Admin Panel
-                </li>
+              {data && (
+                <div className="mx-auto">
+                  {data.role == "admin" && (
+                    <Link
+                      href="/Admin"
+                      rel="noopener noreferrer"
+                      target="_blank">
+                      <li className="cursor-pointer hover:scale-105 transition-all my-1 mx-auto ease-in-out duration-300">
+                        Admin Panel
+                      </li>
+                    </Link>
+                  )}
+                </div>
               )}
 
               <li

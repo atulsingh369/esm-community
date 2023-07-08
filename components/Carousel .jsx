@@ -187,8 +187,10 @@ const Carousel = () => {
         <div className="carousel carousel-center p-4 space-x-8 border-4 border-white border-dashed rounded-xl">
           {data ? (
             <div className="moving-images items-center flex space-x-8">
-              {data.map((item) => (
-                <div className="carousel-item h-80 hover:scale-105 transition-all ease-in-out duration-300 ">
+              {data.map((item, index) => (
+                <div
+                  key={index}
+                  className="carousel-item h-80 hover:scale-105 transition-all ease-in-out duration-300 ">
                   <img src={item} className="rounded-box w-96" />
                 </div>
               ))}

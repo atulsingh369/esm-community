@@ -211,7 +211,7 @@
 }
 /* moving-text */
 .moving-text {
-  animation: rightToLeft 50s infinite ease-in-out;
+  animation: rightToLeft 20s infinite linear;
 }
 
 .moving-images {
@@ -220,7 +220,7 @@
 
 @keyframes rightToLeft {
   0% {
-    translate: 100%;
+    translate: 150%;
   }
   100% {
     translate: -100%;
