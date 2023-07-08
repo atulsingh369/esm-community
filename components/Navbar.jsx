@@ -35,10 +35,12 @@ const Navbar = () => {
         toast.error(error.code);
       });
     dispatch(setUser(null));
+    setData(null);
   };
 
-  // Getting data
-  const docRef = doc(db, "users", user.email);
+  const docRef = user
+    ? doc(db, "users", user.email)
+    : doc(db, "users", "sample@gmail.com");
 
   useEffect(() => {
     localStorage.setItem("theme", theme);
@@ -162,8 +164,8 @@ const Navbar = () => {
               </span>
               <div className="avatar">
                 <div className="w-9 rounded-full">
-                  {user.photoURL ? (
-                    <img src={user.photoURL} />
+                  {data ? (
+                    <img src={data.photoURL} />
                   ) : (
                     <img src="https://ik.imagekit.io/xji6otwwkb/Profile.png?updatedAt=1680849745697" />
                   )}
