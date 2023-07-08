@@ -20,7 +20,10 @@ module.exports = {
 			flexGrow: {
 				2: '2',
 				10: '10,'
-			}
+			},
+			colors: {
+				'rainbow': 'linear-gradient(90deg, #ff6464 0%, #ffbf59 50%, #47c9ff 100%)',
+			},
 		},
 	},
 	plugins: [require("daisyui")],

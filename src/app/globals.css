@@ -104,6 +104,17 @@
   font-size: 1.2em;
 }
 
+#heading3 {
+	border: 5px solid;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  /* background: linear-gradient(90deg, #ff6464 0%, #ffbf59 50%, #47c9ff 100%); */
+  border-color: linear-gradient(90deg, #ff6464 0%, #ffbf59 50%, #47c9ff 100%);
+  transition: width 0.4s cubic-bezier(0.42, 0, 0.58, 1);
+  text-align: center;
+  font-size: 1.875em;
+  line-height: 2.25rem;
+}
+
 .field {
   display: flex;
   align-items: center;
@@ -321,7 +332,7 @@
 }
 
 .type1::before {
-  content: "Save & Next";
+  content: "Upload";
   height: 50px;
   width: 100%;
   background-color: #fff;

@@ -18,13 +18,17 @@ import { db, storage } from "../config";
 import "./load.css";
 
 const Admin = () => {
-  const [loading, setLoading] = useState(false);
   const [image, setImage] = useState(null);
   const [photo, setPhoto] = useState(
     "https://ik.imagekit.io/xji6otwwkb/Profile.png?updatedAt=1680849745697"
   );
   const [name, setName] = useState("");
   const [data, setData] = useState([]);
+  const [note, setNote] = useState("");
+
+  const [gallery, setGalery] = useState(false);
+  const [carousel, setCarousel] = useState(false);
+  const [notice, setNotice] = useState(false);
 
   //Displaying Photo
   const handleChange = async (e) => {
@@ -33,16 +37,14 @@ const Admin = () => {
     setName(e.target.files[0].name);
   };
 
-  //Uploading Photo
+  //Uploading Gallery
   const upload = async () => {
     try {
-      setLoading(true);
       if (!image) {
         toast.error("Photo not Selected");
         setPhoto(
           "https://ik.imagekit.io/xji6otwwkb/Profile.png?updatedAt=1680849745697"
         );
-        setLoading(false);
         return;
       }
 
@@ -69,14 +71,97 @@ const Admin = () => {
       setPhoto(
         "https://ik.imagekit.io/xji6otwwkb/Profile.png?updatedAt=1680849745697"
       );
-      setLoading(false);
       toast.success("Photo Uploaded Succesfully");
+      setTimeout(() => {
+        setGalery(false);
+      }, 1500);
     } catch (error) {
       toast.error(error.code);
       setPhoto(
         "https://ik.imagekit.io/xji6otwwkb/Profile.png?updatedAt=1680849745697"
       );
-      setLoading(false);
+      setGalery(false);
+    }
+  };
+
+  //Uploading Carousel
+  const carusl = async () => {
+    try {
+      if (!image) {
+        toast.error("Photo not Selected");
+        setPhoto(
+          "https://ik.imagekit.io/xji6otwwkb/Profile.png?updatedAt=1680849745697"
+        );
+        return;
+      }
+
+      // Getting data
+      const docRef = doc(db, "carousel", "images");
+      const docSnap = await getDoc(docRef);
+
+      // uploading Photo
+      const imageRef = ref(storage, `Carousel/${name}`);
+      await uploadBytes(imageRef, image);
+      const url = await getDownloadURL(imageRef);
+
+      // If data exist save it to array otherwise create new
+      if (docSnap.exists()) {
+        await setDoc(doc(db, "carousel", "images"), {
+          images: [...docSnap.data().images, url],
+        });
+      } else {
+        await setDoc(doc(db, "carousel", "images"), {
+          images: [url],
+        });
+      }
+
+      setPhoto(
+        "https://ik.imagekit.io/xji6otwwkb/Profile.png?updatedAt=1680849745697"
+      );
+      toast.success("Photo Uploaded Succesfully");
+      setTimeout(() => {
+        setCarousel(false);
+      }, 1500);
+    } catch (error) {
+      toast.error(error.code);
+      setPhoto(
+        "https://ik.imagekit.io/xji6otwwkb/Profile.png?updatedAt=1680849745697"
+      );
+      setCarousel(false);
+    }
+  };
+
+  //Uploading Notice
+  const notices = async () => {
+    try {
+      if (!note) {
+        toast.error("Enter Notice");
+        setNote("");
+        return;
+      }
+
+      // Getting Date
+      var today = new Date();
+      var date =
+        today.getFullYear() +
+        "-" +
+        (today.getMonth() + 1) +
+        "-" +
+        today.getDate();
+
+      await setDoc(doc(db, "notices", date), {
+        Notice: note,
+      });
+
+      setNote("");
+      toast.success("Notice Uploaded Succesfully");
+      setTimeout(() => {
+        setNotice(false);
+      }, 1500);
+    } catch (error) {
+      toast.error(error.code);
+      setNote("");
+      setNotice(false);
     }
   };
 
@@ -130,57 +215,169 @@ const Admin = () => {
           <p className="text-center text-2xl my-48">😕 No Data Found 😕</p>
         )}
 
-        <div className="flex flex-col md:flex-row justify-evenly m-10 text-xl">
-          <button className="button2 rounded-xl">Upload Gallery Images</button>
-          <button className="button2 rounded-xl">Upload Carousel Images</button>
-          <button className="button2 rounded-xl">Upload Gallery Images</button>
-        </div>
-
-        {/* Upload Gallery Images */}
-        <div className="space-y-6">
-          <label
-            htmlFor="aad"
-            className="flex mt-10 flex-col p-5 items-center border-4 border-dashed border-white rounded-xl">
-            <div className="shrink-0">
-              <img
-                className="h-48 w-fit object-contain"
-                src={photo}
-                alt="Upload in Gallery"
-              />
-            </div>
-            <input
-              onChange={handleChange}
-              type="file"
-              id="aad"
-              accept="image/jpeg,image/jpg,image/png"
-              className="mx-auto mt-8 text-sm text-white file:mr-4 file:py-2 file:px-4 file:bg-[#FF671F] file:rounded-full file:border-0 file:text-sm file:font-semibold hover:file:cursor-pointer"
-            />
-          </label>
-
-          <button onClick={upload} className="button4 w-full">
-            <span className="circle1"></span>
-            <span className="circle2"></span>
-            <span className="circle3"></span>
-            <span className="circle4"></span>
-            <span className="circle5"></span>
-            <span className="text">
-              {loading ? (
-                <div className="spinner mx-auto">
-                  <div></div>
-                  <div></div>
-                  <div></div>
-                  <div></div>
-                  <div></div>
-                  <div></div>
-                </div>
+        <section className="flex flex-col space-y-40 justify-evenly m-10 mt-72 text-xl">
+          {/* Gallery */}
+          <div>
+            <p className="text-3xl text-center">Gallery</p>
+            <div className="flex justify-around flex-col md:flex-row space-y-6 items-center">
+              {!gallery ? (
+                <button
+                  onClick={() => setGalery(true)}
+                  className="button4 mx-auto mt-10">
+                  <span className="circle1"></span>
+                  <span className="circle2"></span>
+                  <span className="circle3"></span>
+                  <span className="circle4"></span>
+                  <span className="circle5"></span>
+                  <span className="text">Upload Images</span>
+                </button>
               ) : (
-                "Upload"
-              )}
-            </span>
-          </button>
+                <div className="space-y-6 mx-auto w-full md:w-1/2">
+                  <label
+                    htmlFor="aad"
+                    className="flex mt-10 flex-col p-5 items-center border-4 border-dashed border-white rounded-xl">
+                    <div className="shrink-0">
+                      <img
+                        className="h-48 w-fit object-contain"
+                        src={photo}
+                        alt="Upload in Gallery"
+                      />
+                    </div>
+                    <input
+                      onChange={handleChange}
+                      type="file"
+                      id="aad"
+                      accept="image/jpeg,image/jpg,image/png"
+                      className="mx-auto mt-8 text-sm text-white file:mr-4 file:py-2 file:px-4 file:bg-[#FF671F] file:rounded-full file:border-0 file:text-sm file:font-semibold hover:file:cursor-pointer"
+                    />
+                  </label>
 
-          <ToastContainer />
-        </div>
+                  <button
+                    onClick={upload}
+                    className="button5 mt-10 type1"></button>
+
+                  <ToastContainer />
+                </div>
+              )}
+              <button
+                onClick={() => setGalery(true)}
+                className="button4 mx-auto mt-10">
+                <span className="circle1"></span>
+                <span className="circle2"></span>
+                <span className="circle3"></span>
+                <span className="circle4"></span>
+                <span className="circle5"></span>
+                <span className="text">Delete Images</span>
+              </button>
+            </div>
+          </div>
+
+          {/* Carousel */}
+          <div>
+            <p className="text-3xl text-center">Carousel</p>
+            <div className="flex justify-around flex-col md:flex-row space-y-6 items-center">
+              {!carousel ? (
+                <button
+                  onClick={() => setCarousel(true)}
+                  className="button4 mx-auto mt-10">
+                  <span className="circle1"></span>
+                  <span className="circle2"></span>
+                  <span className="circle3"></span>
+                  <span className="circle4"></span>
+                  <span className="circle5"></span>
+                  <span className="text">Upload Images</span>
+                </button>
+              ) : (
+                <div className="space-y-6 mx-auto w-full md:w-1/2">
+                  <label
+                    htmlFor="aad"
+                    className="flex mt-10 flex-col p-5 items-center border-4 border-dashed border-white rounded-xl">
+                    <div className="shrink-0">
+                      <img
+                        className="h-48 w-fit object-contain"
+                        src={photo}
+                        alt="Upload in Carousel"
+                      />
+                    </div>
+                    <input
+                      onChange={handleChange}
+                      type="file"
+                      id="aad"
+                      accept="image/jpeg,image/jpg,image/png"
+                      className="mx-auto mt-8 text-sm text-white file:mr-4 file:py-2 file:px-4 file:bg-[#FF671F] file:rounded-full file:border-0 file:text-sm file:font-semibold hover:file:cursor-pointer"
+                    />
+                  </label>
+
+                  <button
+                    onClick={carusl}
+                    className="button5 mt-10 type1"></button>
+
+                  <ToastContainer />
+                </div>
+              )}
+              <button
+                onClick={() => setNotice(true)}
+                className="button4 mx-auto mt-10">
+                <span className="circle1"></span>
+                <span className="circle2"></span>
+                <span className="circle3"></span>
+                <span className="circle4"></span>
+                <span className="circle5"></span>
+                <span className="text">Delete Images</span>
+              </button>
+            </div>
+          </div>
+
+          {/* Notice */}
+          <div>
+            <p className="text-3xl text-center">Notice</p>
+            <div className="flex justify-around flex-col md:flex-row space-y-6 items-center">
+              {!notice ? (
+                <button
+                  onClick={() => setNotice(true)}
+                  className="button4 mx-auto mt-10">
+                  <span className="circle1"></span>
+                  <span className="circle2"></span>
+                  <span className="circle3"></span>
+                  <span className="circle4"></span>
+                  <span className="circle5"></span>
+                  <span className="text">Upload Notice</span>
+                </button>
+              ) : (
+                <div className="space-y-6 mt-12 mx-auto md:w-1/2 w-full">
+                  <div className="field">
+                    <input
+                      name="note"
+                      required
+                      placeholder="Notice"
+                      className="input-field"
+                      type="text"
+                      onChange={(e) => setNote(e.target.value)}
+                      value={note}
+                    />
+                  </div>
+
+                  <button
+                    onClick={notices}
+                    className="button5 mt-10 type1"></button>
+
+                  <ToastContainer />
+                </div>
+              )}
+              <button
+                onClick={() => setNotice(true)}
+                className="button4 mx-auto mt-10">
+                <span className="circle1"></span>
+                <span className="circle2"></span>
+                <span className="circle3"></span>
+                <span className="circle4"></span>
+                <span className="circle5"></span>
+                <span className="text">Delete Images</span>
+              </button>
+            </div>
+          </div>
+        </section>
+
         <ToastContainer />
       </div>
 
