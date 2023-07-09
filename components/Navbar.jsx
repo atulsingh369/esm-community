@@ -119,6 +119,7 @@ const Navbar = () => {
           </div>
         </div>
       </div>
+
       <div className="bottom-bar flex justify-evenly items-center py-1 bg-white  border-b-4 border-[#FF671F] ">
         <Link
           href="/"
@@ -132,15 +133,11 @@ const Navbar = () => {
         </Link>
         <Link
           href="/Members"
-          rel="noopener noreferrer"
-          target="_blank"
           className="btn bg-white border-none text-black font-semibold text-lg hover:bg-[#046A38] hover:text-white hover:font-normal">
           Our Members
         </Link>
         <Link
           href="/Gallery"
-          rel="noopener noreferrer"
-          target="_blank"
           className="btn bg-white border-none text-black font-semibold text-lg hover:bg-[#046A38] hover:text-white hover:font-normal">
           Gallery
         </Link>
@@ -148,8 +145,6 @@ const Navbar = () => {
           <div className="flex ">
             <Link
               href="/Register"
-              rel="noopener noreferrer"
-              target="_blank"
               className="btn bg-white border-none text-black font-semibold text-lg hover:bg-[#046A38] hover:text-white hover:font-normal">
               Sign Up
             </Link>
@@ -178,10 +173,7 @@ const Navbar = () => {
               {data && (
                 <div className="mx-auto">
                   {data.role == "admin" && (
-                    <Link
-                      href="/Admin"
-                      rel="noopener noreferrer"
-                      target="_blank">
+                    <Link href="/Admin">
                       <li className="cursor-pointer hover:scale-105 transition-all my-1 mx-auto ease-in-out duration-300">
                         Admin Panel
                       </li>
